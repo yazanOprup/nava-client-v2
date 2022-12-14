@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "582402408833",
+    "project_id": "nava-main-c2e70",
+    "storage_bucket": "nava-main-c2e70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582402408833:android:5a5cc35ff0ac2a33f92880",
+        "android_client_info": {
+          "package_name": "com.navaservices.navaclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582402408833-susbl70e3avtp79pbg6cbb41fl871j50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqTt4hCqzXp4csULgv0zjsDZ7xxCBvmcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582402408833-susbl70e3avtp79pbg6cbb41fl871j50.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "582402408833-1n621tbe5o04efvq93mvb53ldkb3sl3k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.navaservices.navaclient"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582402408833:android:3ac92ba6a27d448df92880",
+        "android_client_info": {
+          "package_name": "com.navaClientservices.navaclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582402408833-susbl70e3avtp79pbg6cbb41fl871j50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqTt4hCqzXp4csULgv0zjsDZ7xxCBvmcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582402408833-susbl70e3avtp79pbg6cbb41fl871j50.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "582402408833-1n621tbe5o04efvq93mvb53ldkb3sl3k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.navaservices.navaclient"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

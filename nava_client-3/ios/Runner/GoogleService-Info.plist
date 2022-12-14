@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>582402408833-se2ohrnslv4qpfodp9q0mdaokvj251gq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.582402408833-se2ohrnslv4qpfodp9q0mdaokvj251gq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC2WT-xKMvLXx6YuV5D42aKrB4Pv0QmO_0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>582402408833</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.navaClientservices.navaclient</string>
+	<key>PROJECT_ID</key>
+	<string>nava-main-c2e70</string>
+	<key>STORAGE_BUCKET</key>
+	<string>nava-main-c2e70.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:582402408833:ios:6ba749df76a6d977f92880</string>
+</dict>
+</plist>
