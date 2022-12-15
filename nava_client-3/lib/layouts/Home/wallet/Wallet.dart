@@ -41,41 +41,12 @@ class _WalletState extends State<Wallet> {
     VisitorProvider visitorProvider =
         Provider.of<VisitorProvider>(context, listen: false);
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 75),
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: MyColors.primary,
-              elevation: 0,
-              title: Text(tr("wallet"),
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              // leading: IconButton(
-              //   icon: Icon(Icons.arrow_back_ios),
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //   },
-              // ),
-              actions: [
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (c) => MainContactUs()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Image(
-                      image: ExactAssetImage(Res.contactus),
-                      width: 26,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            AppBarFoot(),
-          ],
-        ),
+      //backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(tr("wallet"),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        //leading: CustomBackButton(ctx: context),
       ),
       body: visitorProvider.visitor
           ? Visitor()

@@ -36,14 +36,14 @@ class Data {
   Data({
     this.services,
     this.guaranteeDays,
-    this.tax,
+    this.tax ,
     this.price,
   });
 
   List<Service> services;
-  int guaranteeDays;
-  var tax;
-  var price;
+  dynamic guaranteeDays;
+  dynamic tax;
+  dynamic price;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     services: List<Service>.from(json["services"].map((x) => Service.fromJson(x))),
@@ -73,7 +73,7 @@ class Service {
   int id;
   String title;
   String description;
-  int price;
+  dynamic price;
   bool checked;
   int count;
 

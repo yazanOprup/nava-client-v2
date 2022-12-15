@@ -57,10 +57,13 @@ class _ProcessingOrdersState extends State<ProcessingOrders> {
       {int id, roomId, String title, status, price, orderNum, icon}) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(
+          MaterialPageRoute(
             builder: (c) => OrderDetails(
-                  id: id,
-                )));
+              id: id,
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(top: 18, right: 12, left: 12),
@@ -197,7 +200,7 @@ class _ProcessingOrdersState extends State<ProcessingOrders> {
   ProcessingOrdersModel processingOrdersModel = ProcessingOrdersModel();
   Future getProcessingOrders() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/my-orders/current");
+    final url = Uri.http(URL, "api/my-orders/current");
     try {
       final response = await http.post(
         url,

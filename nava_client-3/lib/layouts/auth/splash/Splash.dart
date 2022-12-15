@@ -29,6 +29,7 @@ class _SplashState extends State<Splash> {
     // GlobalNotification.instance.setupNotification(widget.navigatorKey);
     _splashTimer();
     getUuid();
+
     super.initState();
   }
 

@@ -200,7 +200,7 @@ class _FinishedOrdersState extends State<FinishedOrders> {
   ProcessingOrdersModel finishedOrdersModel = ProcessingOrdersModel();
   Future getFinishedOrders() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/my-orders/finish");
+    final url = Uri.http(URL, "api/my-orders/finish");
     try {
       final response = await http.post(
         url,

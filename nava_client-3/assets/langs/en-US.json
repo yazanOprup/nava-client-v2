@@ -13,6 +13,7 @@
   "visitor": " Log in as a visitor ",
   "OTPFaild" : "OTP Didn't sent ? send again",
   "name": " Name ",
+  "guarantee" : "Guarantees",
   "phone": " Mobile number ",
   "password": " Password ",
   "confirmPassword": " Confirm Password ",

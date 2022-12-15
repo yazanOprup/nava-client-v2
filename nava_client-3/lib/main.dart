@@ -12,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'helpers/constants/MyColors.dart';
 // import 'helpers/providers/UserProvider.dart';
 // import 'helpers/providers/fcmProvider.dart';
@@ -51,8 +52,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final navigatorKey = new GlobalKey<NavigatorState>();
 
+
   @override
   void initState() {
+     
     super.initState();
     FirebaseMessaging.instance.getToken().then((value) =>print(value));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -152,7 +155,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -186,7 +189,7 @@ class _MyAppState extends State<MyApp> {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        home: Splash(
+        home:  Splash(
           navigatorKey: navigatorKey,
         ),
         // SimpleRecorder(),

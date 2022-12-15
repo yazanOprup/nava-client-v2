@@ -14,6 +14,7 @@ import 'package:nava/helpers/providers/visitor_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import 'SubCategoryDetails.dart';
 
 class SubCategories extends StatefulWidget {
@@ -38,61 +39,31 @@ class _SubCategoriesState extends State<SubCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyColors.primary,
-        elevation: 0,
-        title: Text(
-          widget.name,
-          style: TextStyle(fontSize: 18),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        actions: [
-          Container(
-            width: 50,
-            height: 40,
-            decoration: BoxDecoration(
-              // border: Border.all(width: .5),
-                borderRadius: BorderRadius.circular(5),
-                image: DecorationImage(
-                    image: NetworkImage(widget.img), fit: BoxFit.cover)),
-            margin: const EdgeInsets.only(top: 10, left: 15, right: 15),
-            padding: const EdgeInsets.all(18),
-          ),
-        ],
+        automaticallyImplyLeading: false,
+        title: Text(widget.name,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        leading: CustomBackButton(ctx: context),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppBarFoot(),
-            Container(
-              height: MediaQuery.of(context).size.height * .87,
-              child: loading
-                  ? MyLoading()
-                  : ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  physics: BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  itemCount: subCategoriesModel.data.length,
-                  itemBuilder: (c, i) {
-                    return Column(
-                      children: [
-                        subCategoryItem(
-                          id: subCategoriesModel.data[i].id,
-                          img: subCategoriesModel.data[i].image,
-                          title: subCategoriesModel.data[i].title,
-                        ),
-                        Divider(),
-                      ],
-                    );
-                  }),
-            ),
-          ],
-        ),
-      ),
+      body: loading
+          ? MyLoading()
+          : GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 3 / 2,
+                crossAxisCount: 1,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+              ),
+          padding: EdgeInsets.all(20),
+          physics: BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          itemCount: subCategoriesModel.data.length,
+          itemBuilder: (c, i) {
+            return subCategoryItem(
+              id: subCategoriesModel.data[i].id,
+              img: subCategoriesModel.data[i].image,
+              title: subCategoriesModel.data[i].title,
+            );
+          }),
     );
   }
 
@@ -107,23 +78,35 @@ class _SubCategoriesState extends State<SubCategories> {
             builder: (c) => SubCategoryDetails(
                 id: id, categoryId: widget.id, name: title, img: img)));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 75,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      child: Card(
+        elevation: 0.5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
           children: [
-            Container(
-              width: 70,
-              height: 75,
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  border: Border.all(width: .5),
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: NetworkImage(img), fit: BoxFit.cover)),
+            Expanded(
+              child: Image(
+                image: NetworkImage(img),
+                width: 20,
+                color: MyColors.offPrimary,
+              ),
             ),
-            Text(title, style: TextStyle(fontSize: 18))
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: MyColors.primary,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(5),
+                ),
+              ),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 19, color: MyColors.offWhite),
+              ),
+            ),
           ],
         ),
       ),
@@ -134,7 +117,7 @@ class _SubCategoriesState extends State<SubCategories> {
   SubCategoriesModel subCategoriesModel = SubCategoriesModel();
   Future getSubCategories() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/sub-categories");
+    final url = Uri.http(URL, "api/sub-categories");
     try {
       final response = await http.post(
         url,

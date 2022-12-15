@@ -56,29 +56,32 @@ class RichTextFiled extends StatelessWidget {
         validator: (value) => validate(value),
         onChanged: onChange,
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: MyColors.grey.withOpacity(.5), width: 1),
-                borderRadius: BorderRadius.circular(10)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: MyColors.primary, width: 1)),
-            errorBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: MyColors.grey.withOpacity(.5), width: 1),
-                borderRadius: BorderRadius.circular(10)),
-            focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Colors.red, width: 1)),
-            errorStyle: GoogleFonts.almarai(fontSize: 14),
-            // labelText: " $label ",
-            alignLabelWithHint: true,
-            labelStyle: GoogleFonts.almarai(
-                fontSize: 15, color: labelColor ?? MyColors.grey),
-            fillColor: fillColor ?? MyColors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-            filled: true,
-            suffixIcon: icon),
+          hintText: label,
+          hintStyle: TextStyle(fontSize: 13, color: MyColors.grey),
+          enabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: MyColors.grey.withOpacity(.5), width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: MyColors.primary, width: 1)),
+          errorBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: MyColors.grey.withOpacity(.5), width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 1)),
+          errorStyle: GoogleFonts.almarai(fontSize: 14),
+          // labelText: " $label ",
+          alignLabelWithHint: true,
+          labelStyle: GoogleFonts.almarai(
+              fontSize: 15, color: labelColor ?? MyColors.grey),
+          fillColor: fillColor ?? MyColors.white,
+          //contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+          filled: true,
+          suffixIcon: icon,
+        ),
       ),
     );
   }

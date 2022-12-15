@@ -154,7 +154,7 @@ class _MainState extends State<Main> {
                         width: MediaQuery.of(context).size.width,
                         height: 140,
                         decoration: BoxDecoration(
-                            //color: MyColors.primary,
+                            // color: MyColors.primary,
                             // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))
                             ),
                       ),
@@ -164,7 +164,7 @@ class _MainState extends State<Main> {
                               ? Container(
                                   height: 140,
                                   child: SpinKitDoubleBounce(
-                                    color: MyColors.white,
+                                    color: MyColors.primary,
                                     size: 30.0,
                                   ),
                                 )
@@ -264,30 +264,42 @@ class _MainState extends State<Main> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        //color: MyColors.primary,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20))),
-                  ),
-                  RichTextFiled(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    height: 45,
-                    icon: Icon(Icons.search),
-                    controller: search,
-                    label: tr("searchWord"),
-                    labelColor: MyColors.grey,
-                    onChange: (word) {
-                      getSearch();
-                    },
-                  ),
-                ],
+              RichTextFiled(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                height: 45,
+                icon: Icon(Icons.search),
+                controller: search,
+                label: tr("searchWord"),
+                labelColor: MyColors.grey,
+                onChange: (word) {
+                  getSearch();
+                },
               ),
+
+              // Stack(
+              //   children: [
+              //     Container(
+              //       width: MediaQuery.of(context).size.width,
+              //       height: 60,
+              //       decoration: BoxDecoration(
+              //           //color: MyColors.primary,
+              //           borderRadius: BorderRadius.only(
+              //               bottomLeft: Radius.circular(20),
+              //               bottomRight: Radius.circular(20))),
+              //     ),
+              //     RichTextFiled(
+              //       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              //       height: 45,
+              //       icon: Icon(Icons.search),
+              //       controller: search,
+              //       label: tr("searchWord"),
+              //       labelColor: MyColors.grey,
+              //       onChange: (word) {
+              //         getSearch();
+              //       },
+              //     ),
+              //   ],
+              // ),
               loading
                   ? Container(
                       height: MediaQuery.of(context).size.height * .5,
@@ -331,46 +343,31 @@ class _MainState extends State<Main> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Container(
-          child: Column(
-            children: [
-              Expanded(
-                child: Image(
-                  image: NetworkImage(img),
-                  width: 20,
-                  color: MyColors.offPrimary,
+        child: Column(
+          children: [
+            Expanded(
+              child: Image(
+                image: NetworkImage(img),
+                width: 20,
+                color: MyColors.offPrimary,
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: MyColors.primary,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(5),
                 ),
               ),
-
-              // child: Container(
-              //   width: 40,
-              //   height: 40,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(image: NetworkImage(img)),
-              //     color: MyColors.grey,
-              //     borderRadius: BorderRadius.circular(50)
-              //   ),
-              //     child: Image(image: NetworkImage(img),width: 50,)
-              //   ),
-
-              //Container(),
-              Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(5),
-                  ),
-                ),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 19,color: MyColors.offWhite),
-                ),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 19, color: MyColors.offWhite),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

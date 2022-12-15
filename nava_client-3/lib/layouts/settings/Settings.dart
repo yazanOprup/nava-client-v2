@@ -13,6 +13,7 @@ import 'package:nava/helpers/constants/LoadingDialog.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
 import 'package:nava/helpers/constants/base.dart';
 import 'package:nava/helpers/customs/AppBarFoot.dart';
+import 'package:nava/helpers/customs/Visitor.dart';
 import 'package:nava/helpers/providers/visitor_provider.dart';
 import 'package:nava/layouts/auth/splash/Splash.dart';
 import 'package:nava/layouts/settings/notifications/Notifications.dart';
@@ -108,11 +109,10 @@ class _SettingsState extends State<Settings> {
             icon: Mdi.web,
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => LangScreen())).then((value){
-                    setState(() {
-                      
-                    });
-                  });
+                      context, MaterialPageRoute(builder: (c) => LangScreen()))
+                  .then((value) {
+                setState(() {});
+              });
             },
           ),
           moreItem(
@@ -146,15 +146,19 @@ class _SettingsState extends State<Settings> {
                   context, MaterialPageRoute(builder: (c) => Terms()));
             },
           ),
-
+          moreItem(
+            title: tr("logout"),
+            icon: Icons.logout,
+            onTap: () => logout()
+          ),
           // InkWell(
-          //   onTap: ()=>logout(),
+          //   onTap: () => logout(),
           //   child: Container(
           //     margin: EdgeInsets.only(top: 10),
-          //     padding: EdgeInsets.symmetric(horizontal: 12,vertical: 12),
+          //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           //     width: MediaQuery.of(context).size.width,
           //     decoration: BoxDecoration(
-          //       border: Border.all(width: 1,color: MyColors.red),
+          //       border: Border.all(width: 1, color: MyColors.red),
           //       borderRadius: BorderRadius.circular(5),
           //     ),
           //     child: Row(
@@ -162,14 +166,26 @@ class _SettingsState extends State<Settings> {
           //       children: [
           //         Row(
           //           children: [
-          //             Icon(Icons.logout,color: MyColors.red,),
+          //             Icon(
+          //               Icons.logout,
+          //               color: MyColors.red,
+          //             ),
           //             Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal:6),
-          //               child: Text(tr("logout"),style: TextStyle(fontSize: 16,color: MyColors.red,fontWeight: FontWeight.bold),),
+          //               padding: const EdgeInsets.symmetric(horizontal: 6),
+          //               child: Text(
+          //                 tr("logout"),
+          //                 style: TextStyle(
+          //                     fontSize: 16,
+          //                     color: MyColors.red,
+          //                     fontWeight: FontWeight.bold),
+          //               ),
           //             ),
           //           ],
           //         ),
-          //         Icon(Icons.arrow_forward_ios,color: MyColors.red,),
+          //         Icon(
+          //           Icons.arrow_forward_ios,
+          //           color: MyColors.red,
+          //         ),
           //       ],
           //     ),
           //   ),
@@ -243,9 +259,19 @@ class _SettingsState extends State<Settings> {
   }
 
   Future logout() async {
+    final bool visitor =
+        Provider.of<VisitorProvider>(context, listen: false).visitor;
+    if (visitor) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (c) => Splash()), (route) => false);
+    }
     LoadingDialog.showLoadingDialog();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String deviceId = await _getId();
+    preferences.remove("fcm_token");
+    preferences.remove("userId");
+    preferences.remove("token");
+
     preferences.setString("device_id", deviceId);
     print("Device Id : " + deviceId.toString());
     print("out:" + preferences.getString("device_id"));

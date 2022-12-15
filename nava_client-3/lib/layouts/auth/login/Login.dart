@@ -225,9 +225,10 @@ class _LoginState extends State<Login> {
         if (responseData["key"] == "success") {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (c) => ActiveAccount(
-                      phone: _phone.text,
-                    )),
+              builder: (c) => ActiveAccount(
+                phone: _phone.text,
+              ),
+            ),
           );
         } else {
           Fluttertoast.showToast(msg: responseData["msg"]);

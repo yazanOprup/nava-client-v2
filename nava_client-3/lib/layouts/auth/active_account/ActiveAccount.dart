@@ -26,6 +26,7 @@ import '../../../helpers/providers/fcmProvider.dart';
 import '../../../helpers/providers/visitor_provider.dart';
 import '../../../res.dart';
 import '../../Home/Home.dart';
+import '../login/Login.dart';
 
 class ActiveAccount extends StatefulWidget {
   final String phone;
@@ -68,7 +69,6 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 alignment: Alignment.centerLeft,
                 child: CustomBackButton(
                   ctx: context,
-                 
                 ),
               ),
               Padding(
@@ -218,12 +218,51 @@ class _ActiveAccountState extends State<ActiveAccount> {
 
   bool loading = false;
   DioBase dioBase = DioBase();
-
+  // Future activeAccount() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   print("========> activeAccount");
+  //   LoadingDialog.showLoadingDialog();
+  //   final url = Uri.http(URL, "api/active-code");
+  //   try {
+  //     print(preferences.getString("uuid"));
+  //     print(preferences.getString("fcmToken"));
+  //     final response = await http.post(
+  //       url,
+  //       body: {
+  //         "phone": "${widget.phone}",
+  //         "code": "${code.text}",
+  //         "uuid": preferences.getString("uuid"),
+  //         "device_id": preferences.getString("fcmToken"),
+  //         "device_type": Platform.isIOS ? "ios" : "android",
+  //         "lang": preferences.getString("lang"),
+  //       },
+  //     ).timeout(Duration(seconds: 10), onTimeout: () {
+  //       throw 'no internet please connect to internet';
+  //     });
+  //     final responseData = json.decode(response.body);
+  //     if (response.statusCode == 200) {
+  //       EasyLoading.dismiss();
+  //       print(responseData);
+  //       if (responseData["key"] == "success") {
+  //         Fluttertoast.showToast(msg: tr("registerSuc"));
+  //         Navigator.of(context).pushAndRemoveUntil(
+  //           MaterialPageRoute(builder: (c) => Login()),
+  //           (route) => false,
+  //         );
+  //       } else {
+  //         Fluttertoast.showToast(msg: responseData["msg"]);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     EasyLoading.dismiss();
+  //     print("fail 222222222   $e}");
+  //   }
+  // }
   Future activeAccount() async {
     setState(() => loading = true);
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print(preferences.getString("fcm_token"));
-    Uri url = Uri.http("api.taqnyat.sa", "v1/messages", {
+    Uri url = Uri.http(URL, "api/active-code", {
       "lang": preferences.getString("lang"),
       "phone": "${widget.phone}",
       "code": "${code.text}",
@@ -231,10 +270,13 @@ class _ActiveAccountState extends State<ActiveAccount> {
       "device_type": Platform.isIOS ? "ios" : "android",
       "uuid": "$uuid",
     });
-    print(url);
+    //print(url);
     try {
+      if(code.text == "1234"){
+
+      }
       final response =
-          await http.get(url).timeout(Duration(seconds: 10), onTimeout: () {
+          await http.post(url).timeout(Duration(seconds: 10), onTimeout: () {
         throw 'no internet please connect to internet';
       });
       final responseData = json.decode(response.body);
@@ -274,6 +316,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
       }
     } catch (e) {
       setState(() => loading = false);
+      Fluttertoast.showToast(msg: e.toString());
       print("fail 222222222   $e}");
     }
   }
