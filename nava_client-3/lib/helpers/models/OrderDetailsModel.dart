@@ -163,8 +163,8 @@ class Details {
         time: json["time"],
         categoryTitle: json["category_title"],
         categoryImage: json["category_image"],
-        lat: json["lat"].toDouble(),
-        lng: json["lng"].toDouble(),
+        lat: double.parse(json["lat"]),
+        lng: double.parse(json["lng"]),
         region: json["region"],
         residence: json["residence"],
         floor: json["floor"],
@@ -276,8 +276,8 @@ class ServiceService {
 
   int id;
   String title;
-  int count;
-  int price;
+  String count;
+  String price;
   String image;
 
   factory ServiceService.fromJson(Map<String, dynamic> json) => ServiceService(

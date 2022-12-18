@@ -20,6 +20,7 @@ import 'package:nava/helpers/customs/RichTextFiled.dart';
 import 'package:nava/helpers/models/ProfileModel.dart';
 import 'package:nava/layouts/settings/contact_us/ContactUs.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../../../res.dart';
 import '../contact_us/mainContactUs.dart';
 import 'change_password.dart';
@@ -27,9 +28,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Profile extends StatefulWidget {
-  final String name,phone,email,img;
+  //final String name,phone,email,img;
 
-  const Profile({Key key, this.name, this.phone, this.email, this.img}) : super(key: key);
+  const Profile({Key key}) : super(key: key);
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -44,10 +45,10 @@ class _ProfileState extends State<Profile> {
   String img;
 
   initInfo(){
-    name.text= widget.name;
-    phone.text= widget.phone;
-    mail.text= widget.email;
-    img= widget.img;
+    // name.text= widget.name;
+    // phone.text= widget.phone;
+    // mail.text= widget.email;
+    // img= widget.img;
   }
 
   @override
@@ -61,39 +62,12 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffold,
-      backgroundColor: MyColors.secondary,
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 75),
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: MyColors.primary,
-              elevation: 0,
-              title: Text(tr("profile"), style: TextStyle(fontSize: 18,fontWeight: FontWeight.normal)),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              actions: [
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (c) => MainContactUs()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Image(
-                      image: ExactAssetImage(Res.contactus),
-                      width: 26,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            AppBarFoot(),
-          ],
-        ),
+      //backgroundColor: MyColors.secondary,
+       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(tr("profile"),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        leading: CustomBackButton(ctx: context),
       ),
       body:
 
@@ -102,7 +76,7 @@ class _ProfileState extends State<Profile> {
           :
       SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(image: DecorationImage(image: ExactAssetImage(Res.splash),fit: BoxFit.cover)),
+          //decoration: BoxDecoration(image: DecorationImage(image: ExactAssetImage(Res.splash),fit: BoxFit.cover)),
           child: Padding(
             padding: EdgeInsets.only(top: 20),
             child: Column(
@@ -124,7 +98,7 @@ class _ProfileState extends State<Profile> {
                                   color: MyColors.primary.withOpacity(.2),
                                   borderRadius: BorderRadius.circular(100),
                                   border:Border.all(width: 2,color: MyColors.primary),
-                                  image: DecorationImage(image: NetworkImage(profileModel.data.avatar),fit: BoxFit.cover)
+                                  image: DecorationImage(image:imageFile != null ? FileImage(imageFile) : NetworkImage(profileModel.data.avatar),fit: BoxFit.cover)
                               ),
                             ),
                             Container(
@@ -141,6 +115,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 20,),
                     Form(
                       key: _formKey,
                       child: Padding(
@@ -148,24 +123,27 @@ class _ProfileState extends State<Profile> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(tr("name"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
+                            //Text(tr("name"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
                             RichTextFiled(
+                              //initialValue: profileModel.data.name,
                               controller: name,
                               label: tr("name"),
                               type: TextInputType.emailAddress,
                               margin: EdgeInsets.only(top: 8,bottom: 10),
                               action: TextInputAction.next,
                             ),
-                            Text(tr("mail"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
+                            //Text(tr("mail"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
                             RichTextFiled(
+                              //initialValue: profileModel.data.email,
                               controller: mail,
                               label: tr("mail"),
                               type: TextInputType.emailAddress,
                               margin: EdgeInsets.only(top: 8,bottom: 10),
                               action: TextInputAction.next,
                             ),
-                            Text(tr("phone"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
+                            //Text(tr("phone"),style: TextStyle(fontSize: 15,color: MyColors.grey),),
                             RichTextFiled(
+                              //initialValue: profileModel.data.phone,
                               controller: phone,
                               label: tr("phone"),
                               type: TextInputType.emailAddress,
@@ -182,16 +160,16 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 68),
                   child: Column(
                     children: [
-                      CustomButton(
-                        title: tr("changePass"),
-                        textColor: MyColors.primary,
-                        margin: EdgeInsets.symmetric(vertical: 0),
-                        color: MyColors.white,
-                        borderColor: MyColors.primary,
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (c)=>ChangePassword()));
-                        },
-                      ),
+                      // CustomButton(
+                      //   title: tr("changePass"),
+                      //   textColor: MyColors.primary,
+                      //   margin: EdgeInsets.symmetric(vertical: 0),
+                      //   color: MyColors.white,
+                      //   borderColor: MyColors.primary,
+                      //   onTap: (){
+                      //     Navigator.push(context, MaterialPageRoute(builder: (c)=>ChangePassword()));
+                      //   },
+                      // ),
                       CustomButton(
                         title: tr("saveChanges"),
                         margin: EdgeInsets.symmetric(vertical: 10),
@@ -215,7 +193,7 @@ class _ProfileState extends State<Profile> {
   File imageFile;
   final picker = ImagePicker();
   Future getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.pickImage(source: source);
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
@@ -276,7 +254,7 @@ class _ProfileState extends State<Profile> {
 
 
   bool loading = true;
-  ProfileModel profileModel =ProfileModel();
+  ProfileModel profileModel = ProfileModel();
   Future getProfile() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     final url = Uri.http(URL, "api/profile");

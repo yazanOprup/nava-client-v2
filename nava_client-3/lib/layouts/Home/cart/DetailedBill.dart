@@ -22,6 +22,7 @@ import 'package:nava/layouts/Home/orders/SuccessfulOrder.dart';
 import 'package:nava/layouts/settings/contact_us/ContactUs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../../../res.dart';
 import '../../settings/contact_us/mainContactUs.dart';
 
@@ -56,186 +57,189 @@ class _DetailedBillState extends State<DetailedBill> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, 75),
-          child: Column(
-            children: [
-              AppBar(
-                backgroundColor: MyColors.primary,
-                elevation: 0,
-                title: Text(tr("detailedBill"),
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                actions: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (c) => MainContactUs()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Image(
-                        image: ExactAssetImage(Res.contactus),
-                        width: 26,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              AppBarFoot(),
-            ],
-          ),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(tr("detailedBill"),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+          leading: CustomBackButton(ctx: context),
         ),
         body: loading
             ? MyLoading()
             : ListView(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.all(10),
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          cartDetailsModel.data.time == null
-                              ? "000000000000000"
-                              : cartDetailsModel.data.time,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.secondary,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        cartDetailsModel.data.time == null
+                            ? "000000000000000"
+                            : cartDetailsModel.data.time,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          cartDetailsModel.data.date,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                        cartDetailsModel.data.date,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                  Divider(
-                    thickness: .5,
-                    color: MyColors.black,
+                  //
+                  SizedBox(
+                    height: 10,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
+                  Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.secondary,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ListTile(
+                        title: Text(
                           cartDetailsModel.data.categoryTitle,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Image(
+                        trailing: Image(
                           image: ExactAssetImage(Res.energy),
                           height: 30,
                           color: MyColors.black,
-                        )
-                      ],
-                    ),
+                        )),
                   ),
-                  Divider(
-                    thickness: .5,
-                    color: MyColors.black,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      final coords = map.Coords(
-                          cartDetailsModel.data.lat, cartDetailsModel.data.lng);
-                      if (await map.MapLauncher.isMapAvailable(
-                          map.MapType.google)) {
-                        await map.MapLauncher.showMarker(
-                          mapType: map.MapType.google,
-                          coords: coords,
-                          title: 'عنوان العميل',
-                          description: '',
-                        );
-                      } else if (await map.MapLauncher.isMapAvailable(
-                          map.MapType.apple)) {
-                        await map.MapLauncher.showMarker(
-                          mapType: map.MapType.apple,
-                          coords: coords,
-                          title: 'عنوان العميل',
-                          description: '',
-                        );
-                      }
-                      // MapsLauncher.launchCoordinates(
-                      //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
-                    },
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            tr("address"),
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "showMap".tr(),
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
+
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * .25,
                     decoration: BoxDecoration(
-                        border:
-                            Border.all(color: MyColors.offPrimary, width: 1)),
-                    child: GoogleMap(
-                      mapType: MapType.normal,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(cartDetailsModel.data.lat,
-                            cartDetailsModel.data.lng),
-                        zoom: 15,
-                      ),
-                      markers: Set<Marker>.of(markers.values),
+                      color: MyColors.secondary,
+                      borderRadius: BorderRadius.circular(5),
                     ),
+                    child: ListTile(
+                        title: Text(
+                          tr("address"),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        trailing: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MyColors.primary,
+                            elevation: 0,
+                          ),
+                          onPressed: () async {
+                            final coords = map.Coords(cartDetailsModel.data.lat,
+                                cartDetailsModel.data.lng);
+                            if (await map.MapLauncher.isMapAvailable(
+                                map.MapType.google)) {
+                              await map.MapLauncher.showMarker(
+                                mapType: map.MapType.google,
+                                coords: coords,
+                                title: 'عنوان العميل',
+                                description: '',
+                              );
+                            } else if (await map.MapLauncher.isMapAvailable(
+                                map.MapType.apple)) {
+                              await map.MapLauncher.showMarker(
+                                mapType: map.MapType.apple,
+                                coords: coords,
+                                title: 'عنوان العميل',
+                                description: '',
+                              );
+                            }
+                            // MapsLauncher.launchCoordinates(
+                            //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
+                          },
+                          child: Text(tr("showMap")),
+                        )),
                   ),
-                  Divider(
-                    thickness: .5,
-                    color: MyColors.black,
+                  SizedBox(
+                    height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15, top: 5),
+                  // InkWell(
+                  //   onTap: () async {
+                  // final coords = map.Coords(
+                  //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
+                  // if (await map.MapLauncher.isMapAvailable(
+                  //     map.MapType.google)) {
+                  //   await map.MapLauncher.showMarker(
+                  //     mapType: map.MapType.google,
+                  //     coords: coords,
+                  //     title: 'عنوان العميل',
+                  //     description: '',
+                  //   );
+                  // } else if (await map.MapLauncher.isMapAvailable(
+                  //     map.MapType.apple)) {
+                  //   await map.MapLauncher.showMarker(
+                  //     mapType: map.MapType.apple,
+                  //     coords: coords,
+                  //     title: 'عنوان العميل',
+                  //     description: '',
+                  //   );
+                  // }
+                  // // MapsLauncher.launchCoordinates(
+                  // //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
+                  //   },
+                  //   child: Padding(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text(
+                  //           tr("address"),
+                  //           style: TextStyle(
+                  //               fontSize: 16, fontWeight: FontWeight.bold),
+                  //         ),
+                  //         Text(
+                  //           "showMap".tr(),
+                  //           style: TextStyle(
+                  //               fontSize: 14, fontWeight: FontWeight.bold),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width,
+                  //   height: MediaQuery.of(context).size.height * .25,
+                  //   decoration: BoxDecoration(
+                  //       border:
+                  //           Border.all(color: MyColors.offPrimary, width: 1)),
+                  //   child: GoogleMap(
+                  //     mapType: MapType.normal,
+                  //     initialCameraPosition: CameraPosition(
+                  //       target: LatLng(cartDetailsModel.data.lat,
+                  //           cartDetailsModel.data.lng),
+                  //       zoom: 15,
+                  //     ),
+                  //     markers: Set<Marker>.of(markers.values),
+                  //   ),
+                  // ),
+
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.secondary,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            tr("address"),
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: MyColors.offPrimary),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${tr("city")} : ",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              Text(
-                                cartDetailsModel.data.region.toString(),
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                        Text(
+                          tr("address"),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            //color: MyColors.offPrimary,
                           ),
                         ),
                         SizedBox(
@@ -244,55 +248,88 @@ class _DetailedBillState extends State<DetailedBill> {
                         Row(
                           children: [
                             Text(
-                              "${tr("addedNotes")} : ",
+                              "${tr("city")} : ",
                               style: TextStyle(fontSize: 15),
                             ),
-                            Container(
-                                width: MediaQuery.of(context).size.width * .6,
-                                child: Text(
-                                  cartDetailsModel.data.addressNotes.toString(),
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
+                            Text(
+                              cartDetailsModel.data.region.toString(),
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                        if (cartDetailsModel.data.addressNotes
+                            .toString()
+                            .isNotEmpty)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${tr("addedNotes")} : ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                cartDetailsModel.data.addressNotes.toString(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.secondary,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          tr("serviceDetails"),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: MyColors.offPrimary,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          //height: 260.0 * cartDetailsModel.data.services.length,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: cartDetailsModel.data.services.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (c, i) {
+                                return serviceItem(
+                                  index: i,
+                                  img: cartDetailsModel.data.services[i].image,
+                                  title:
+                                      cartDetailsModel.data.services[i].title,
+                                  price: cartDetailsModel.data.services[i].total
+                                      .toString(),
+                                );
+                              }),
                         ),
                       ],
                     ),
                   ),
-                  Divider(
-                    thickness: .5,
-                    color: MyColors.black,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      tr("serviceDetails"),
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.offPrimary),
-                    ),
-                  ),
-                  Container(
-                    height: 260.0 * cartDetailsModel.data.services.length,
-                    child: ListView.builder(
-                        itemCount: cartDetailsModel.data.services.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (c, i) {
-                          return serviceItem(
-                            index: i,
-                            img: cartDetailsModel.data.services[i].image,
-                            title: cartDetailsModel.data.services[i].title,
-                            price: cartDetailsModel.data.services[i].total
-                                .toString(),
-                          );
-                        }),
-                  ),
-                  Divider(
-                    thickness: .5,
-                    color: MyColors.black,
+
+                  SizedBox(
+                    height: 10,
                   ),
                   Padding(
                     padding:
@@ -392,7 +429,7 @@ class _DetailedBillState extends State<DetailedBill> {
                   ),
                   Divider(
                     thickness: .5,
-                    color: MyColors.black,
+                    color: MyColors.offPrimary,
                   ),
                   Text(
                     tr("coupon"),
@@ -453,7 +490,7 @@ class _DetailedBillState extends State<DetailedBill> {
                   ),
                   Divider(
                     thickness: .5,
-                    color: MyColors.black,
+                    color: MyColors.offPrimary,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,7 +551,7 @@ class _DetailedBillState extends State<DetailedBill> {
                         child: Row(
                           children: <Widget>[
                             Radio(
-                                activeColor: MyColors.accent,
+                                activeColor: MyColors.primary,
                                 hoverColor: MyColors.white,
                                 focusColor: MyColors.white,
                                 value: PayType.mada,
@@ -554,7 +591,7 @@ class _DetailedBillState extends State<DetailedBill> {
                         child: Row(
                           children: <Widget>[
                             Radio(
-                                activeColor: MyColors.accent,
+                                activeColor: MyColors.primary,
                                 hoverColor: MyColors.white,
                                 focusColor: MyColors.white,
                                 value: PayType.cash,
@@ -596,7 +633,7 @@ class _DetailedBillState extends State<DetailedBill> {
                         child: Row(
                           children: <Widget>[
                             Radio(
-                                activeColor: MyColors.accent,
+                                activeColor: MyColors.primary,
                                 value: PayType.wallet,
                                 groupValue: type,
                                 onChanged: (PayType value) {
@@ -631,7 +668,8 @@ class _DetailedBillState extends State<DetailedBill> {
                       ? Padding(
                           padding: const EdgeInsets.symmetric(vertical: 30),
                           child: SpinKitDoubleBounce(
-                              color: MyColors.primary, size: 25.0))
+                              color: MyColors.primary, size: 25.0),
+                        )
                       : CustomButton(
                           margin: EdgeInsets.symmetric(vertical: 25),
                           title: "confirmOrder".tr(),
@@ -648,84 +686,65 @@ class _DetailedBillState extends State<DetailedBill> {
 
   Widget serviceItem({int index, String img, title, price}) {
     return Container(
+      padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(bottom: 6),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all()),
+        //color: MyColors.white,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(),
-                    image: DecorationImage(
-                        image: NetworkImage(img), fit: BoxFit.cover),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
+          Text(
+            title,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Container(
             height:
                 26.0 * cartDetailsModel.data.services[index].services.length,
             child: ListView.builder(
+                shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount:
                     cartDetailsModel.data.services[index].services.length,
                 itemBuilder: (c, i) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          cartDetailsModel
-                              .data.services[index].services[i].title,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: MyColors.primary),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        cartDetailsModel.data.services[index].services[i].title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: MyColors.offPrimary,
                         ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: Text(
-                                cartDetailsModel
-                                    .data.services[index].services[i].price
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Text(
-                              tr("rs"),
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Text(
+                              cartDetailsModel
+                                  .data.services[index].services[i].price
+                                  .toString(),
                               style: TextStyle(
-                                fontSize: 12,
-                              ),
+                                  fontSize: 14, fontWeight: FontWeight.bold),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          Text(
+                            tr("rs"),
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   );
                 }),
           ),
@@ -733,33 +752,33 @@ class _DetailedBillState extends State<DetailedBill> {
             height: 0,
             thickness: 1,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  tr("price"),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
-                        price,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                tr("price"),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      price,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      tr("rs"),
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Text(
+                    tr("rs"),
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
@@ -788,7 +807,7 @@ class _DetailedBillState extends State<DetailedBill> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print("orderId:" + widget.orderId.toString());
     print(preferences.getString("token"));
-    final url = Uri.https(URL, "api/cart-details");
+    final url = Uri.http(URL, "api/cart-details");
     try {
       final response = await http.post(
         url,
@@ -821,7 +840,7 @@ class _DetailedBillState extends State<DetailedBill> {
   Future addCoupon() async {
     LoadingDialog.showLoadingDialog();
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/add-coupon");
+    final url = Uri.http(URL, "api/add-coupon");
     try {
       final response = await http.post(url, body: {
         "lang": preferences.getString("lang"),
@@ -869,7 +888,7 @@ class _DetailedBillState extends State<DetailedBill> {
     print("${preferences.getString("token")}");
     print(widget.orderId);
     // print(payment);
-    final url = Uri.https(URL, "api/place-order");
+    final url = Uri.http(URL, "api/place-order");
     try {
       final response = await http.post(url, body: {
         "lang": preferences.getString("lang"),

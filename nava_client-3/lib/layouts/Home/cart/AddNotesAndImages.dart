@@ -23,6 +23,7 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:record_mp3/record_mp3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../../../res.dart';
 import '../../settings/contact_us/mainContactUs.dart';
 
@@ -208,43 +209,13 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
               return false;
             },
             child: Scaffold(
-              backgroundColor: MyColors.offWhite,
-              appBar: PreferredSize(
-                preferredSize: Size(MediaQuery.of(context).size.width, 75),
-                child: Column(
-                  children: [
-                    AppBar(
-                      backgroundColor: MyColors.primary,
-                      elevation: 0,
-                      title: Text(tr("addNotesAndImages"),
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                      leading: IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          deleteFile();
-                          Navigator.pop(context);
-                        },
-                      ),
-                      actions: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (c) => MainContactUs()));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Image(
-                              image: ExactAssetImage(Res.contactus),
-                              width: 26,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    AppBarFoot(),
-                  ],
-                ),
+              //backgroundColor: MyColors.offWhite,
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Text(tr("addNotesAndImages"),
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+                leading: CustomBackButton(ctx: context),
               ),
               body: SingleChildScrollView(
                 child: Container(
@@ -254,15 +225,24 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        tr("notes"),
-                      ),
-                      LabelTextField(
-                        margin: EdgeInsets.only(top: 5),
-                        label: tr("enterNotes"),
-                        type: TextInputType.text,
-                        lines: 12,
+                      TextField(
                         controller: _notes,
+                        minLines: 20,
+                        maxLines: 25,
+                        decoration: InputDecoration(
+                          //contentPadding: EdgeInsets.zero,
+                          hintText: tr("enterNotes"),
+                          hintStyle: TextStyle(
+                            color: MyColors.textSettings,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(
+                              color: Color(0xffEEEEEE),
+                              width: 1,
+                            ),
+                          ),
+                        ),
                       ),
                       Spacer(),
                       Padding(
@@ -474,9 +454,10 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
                               addNotes();
                             },
                             style: ElevatedButton.styleFrom(
+                              elevation: 0,
                                 primary: MyColors.primary,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
+                                    borderRadius: BorderRadius.circular(5))),
                             child: isButtonPressed
                                 ? CircularProgressIndicator.adaptive()
                                 : Text(
@@ -514,20 +495,17 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
           Container(
             width: 65,
             height: 65,
-            decoration: BoxDecoration(
-                color: MyColors.greyWhite,
-                borderRadius: BorderRadius.circular(50)),
+            // decoration: BoxDecoration(
+            //     //color: MyColors.greyWhite,
+            //     borderRadius: BorderRadius.circular(50)),
             child: Icon(
               icon,
               size: 30,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 13),
-            ),
+          Text(
+            title,
+            style: TextStyle(fontSize: 13),
           ),
         ],
       ),
@@ -616,7 +594,7 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
   File videoFile;
   final videoPicker = ImagePicker();
   Future getVideo(ImageSource source) async {
-    final pickedFile = await videoPicker.getVideo(source: source);
+    final pickedFile = await videoPicker.pickVideo(source: source);
     setState(() {
       if (pickedFile != null) {
         videoFile = File(pickedFile.path);
@@ -691,9 +669,7 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
     Map<String, String> headers = {
       "Authorization": "Bearer ${preferences.getString("token")}"
     };
-    // print("----------audio > $recordFilePath");
-    // print(" ----------image > $imageFile");
-    // print(" ----------video > $videoFile");
+
     FormData bodyData = FormData.fromMap({
       "lang": preferences.getString("lang"),
       "notes": _notes.text,

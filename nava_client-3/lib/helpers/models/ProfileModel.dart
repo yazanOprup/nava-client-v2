@@ -51,8 +51,8 @@ class Data {
   String email;
   String phone;
   String lang;
-  int online;
-  int active;
+  String online;
+  String active;
   String userType;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(

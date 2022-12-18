@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mdi/mdi.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
@@ -254,11 +255,36 @@ class _MainContactUsState extends State<MainContactUs> {
                               ),
                             ],
                           ),
-                          Text(
-                            tr("viaSocial"),
-                            style: const TextStyle(
-                              color: Color(0xff2BC3F3),
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                tr("viaSocial"),
+                                style: const TextStyle(
+                                  color: Color(0xff2BC3F3),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  SocialIcon(
+                                    icon: FaIcon(FontAwesomeIcons.facebook,),
+                                    url: "https://www.facebook.com",
+                                  ),
+                                  SocialIcon(
+                                    icon: FaIcon(FontAwesomeIcons.instagram,),
+                                    url: "https://www.instagram.com",
+                                  ),
+                                  SocialIcon(
+                                    icon: FaIcon(FontAwesomeIcons.youtube,),
+                                    url: "https://www.youtube.com",
+                                  ),
+                                  SocialIcon(
+                                    icon: FaIcon(FontAwesomeIcons.linkedin,),
+                                    url: "https://www.linkedin.com",
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           // SizedBox(
                           //   child: SvgPicture.asset("assets/images/social-group.svg"),
@@ -272,6 +298,8 @@ class _MainContactUsState extends State<MainContactUs> {
             ),
     );
   }
+
+  
 
   static void launchURL({String url}) async {
     if (!url.toString().startsWith("https")) {
@@ -315,3 +343,14 @@ class _MainContactUsState extends State<MainContactUs> {
     }
   }
 }
+
+class SocialIcon extends StatelessWidget {
+    final FaIcon icon;
+    final String url;
+    SocialIcon({this.icon,this.url});
+  
+    @override
+    Widget build(BuildContext context) {
+      return IconButton(onPressed: (){}, icon: icon);
+    }
+  }

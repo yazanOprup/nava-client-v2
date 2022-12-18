@@ -86,12 +86,14 @@ class _SettingsState extends State<Settings> {
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (c) => Profile(
-                                img: "img",
-                                name: "name",
-                                phone: "phone",
-                                email: "email",
-                              )));
+                        builder: (c) => Profile(
+                            // img: "img",
+                            // name: tr("name"),
+                            // phone: tr("phone"),
+                            // email: tr("phone"),
+                            ),
+                      ),
+                    );
             },
           ),
           moreItem(
@@ -149,7 +151,7 @@ class _SettingsState extends State<Settings> {
           moreItem(
             title: tr("logout"),
             icon: Icons.logout,
-            onTap: () => logout()
+            onTap: () => logout(),
           ),
           // InkWell(
           //   onTap: () => logout(),
@@ -268,9 +270,6 @@ class _SettingsState extends State<Settings> {
     LoadingDialog.showLoadingDialog();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String deviceId = await _getId();
-    preferences.remove("fcm_token");
-    preferences.remove("userId");
-    preferences.remove("token");
 
     preferences.setString("device_id", deviceId);
     print("Device Id : " + deviceId.toString());
@@ -278,14 +277,18 @@ class _SettingsState extends State<Settings> {
     final url = Uri.http(URL, "api/logout");
     try {
       print("out:" + preferences.getString("fcm_token"));
-      final response = await http.post(url, headers: {
-        "Authorization": "Bearer ${preferences.getString("token")}",
-        "lang": preferences.getString("lang"),
-      }, body: {
-        // "device_id": preferences.getString("fcm_token"),
-        // "device_id": preferences.getString("device_id"),
-      }).timeout(
-        Duration(seconds: 9),
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer ${preferences.getString("token")}",
+        },
+        body: {
+          "lang": preferences.getString("lang"),
+          // "deivce_id": preferences.getString("fcm_token"),
+          "uuid": preferences.getString("device_id"),
+        },
+      ).timeout(
+        Duration(seconds: 10),
         onTimeout: () {
           throw 'no internet please connect to internet';
         },
@@ -300,7 +303,9 @@ class _SettingsState extends State<Settings> {
           preferences.remove("userId");
           preferences.remove("token");
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (c) => Splash()), (route) => false);
+            MaterialPageRoute(builder: (c) => Splash()),
+            (route) => false,
+          );
         } else {
           print("------------ else");
           Fluttertoast.showToast(msg: responseData["msg"]);

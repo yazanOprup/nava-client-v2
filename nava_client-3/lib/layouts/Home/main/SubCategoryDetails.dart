@@ -132,9 +132,10 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
                                               : addToCartModel.data.price
                                                   .toString(),
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              //fontWeight: FontWeight.bold,
-                                              color: MyColors.black),
+                                            fontSize: 16,
+                                            //fontWeight: FontWeight.bold,
+                                            color: MyColors.black,
+                                          ),
                                         ),
                                       ),
                                       Text(
@@ -154,11 +155,10 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           tr("longText01"),
-                          style: GoogleFonts.ibmPlexSans(
-                            fontSize: 11,
-                            //fontWeight: FontWeight.bold,
-                            color: MyColors.grey
-                          ),
+                          style: TextStyle(
+                              fontSize: 11,
+                              //fontWeight: FontWeight.bold,
+                              color: MyColors.grey),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -166,7 +166,7 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
                         height: 40,
                         title: tr("continue"),
                         onTap: () {
-                          if (subCategoryDetailsModel.data.price == '0' &&
+                          if (subCategoryDetailsModel.data.price == 0 &&
                               addToCartModel.data == null) {
                             Fluttertoast.showToast(
                               msg: "youShouldAtLeastAddOneServiceToContinue"
@@ -174,10 +174,26 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
                             );
                             return;
                           }
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
                               builder: (c) => Cart(
-                                    categoryId: widget.categoryId,
-                                  )));
+                                categoryId: widget.categoryId,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      CustomButton(
+                        height: 40,
+                        title: tr("goToCart"),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (c) => Cart(
+                                categoryId: widget.categoryId,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ],
@@ -217,11 +233,12 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
                                     .data.services[i].checked) {
                                   if (i == 0) {
                                     addToCart(
-                                        counter: "down",
-                                        serviceId: subCategoryDetailsModel
-                                            .data.services[i].id
-                                            .toString(),
-                                        unchecked: "0");
+                                      counter: "down",
+                                      serviceId: subCategoryDetailsModel
+                                          .data.services[i].id
+                                          .toString(),
+                                      unchecked: "0",
+                                    );
                                   } else {
                                     addToCart(
                                         counter: "down",
@@ -439,9 +456,16 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
   String total, vat;
   AddToCartModel addToCartModel = AddToCartModel();
 
-  Future addToCart({String serviceId, counter, unchecked}) async {
+  Future addToCart(
+      {String serviceId, counter, unchecked, int serviceIndex}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     LoadingDialog.showLoadingDialog();
+    // print(preferences.getString("uuid"));
+    // print(preferences.getInt("cityId").toString());
+    // print(widget.id.toString());
+    // print(serviceId);
+    // print(counter);
+    // print(unchecked);
     final url = Uri.http(URL, "api/add-to-cart");
     try {
       final response = await http.post(
@@ -455,6 +479,7 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
           "service_id": serviceId,
           "counter": counter,
           "unchecked": unchecked,
+          "user_id": preferences.getString("userId"),
         },
       ).timeout(Duration(seconds: 10), onTimeout: () {
         throw 'no internet please connect to internet';
@@ -464,7 +489,7 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
         EasyLoading.dismiss();
         print("responseData");
         if (responseData["key"] == "success") {
-          getSubCategoryDetails();
+          //getSubCategoryDetails();
           setState(() {
             addToCartModel = AddToCartModel.fromJson(responseData);
           });

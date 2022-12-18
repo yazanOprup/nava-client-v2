@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
 
 class RichTextFiled extends StatelessWidget {
+  final String initialValue;
   final TextEditingController controller;
   final String label;
   final EdgeInsets margin;
@@ -20,23 +21,25 @@ class RichTextFiled extends StatelessWidget {
   final Function(String value) onChange;
   final Widget icon;
 
-  RichTextFiled(
-      {this.label,
-      this.controller,
-      this.margin = const EdgeInsets.all(0),
-      this.type = TextInputType.text,
-      this.max,
-      this.min,
-      this.height,
-      this.validate,
-      this.fillColor,
-      this.readOnly = false,
-      this.action,
-      this.submit,
-      this.icon,
-      this.labelColor,
-      this.pass,
-      this.onChange});
+  RichTextFiled({
+    this.label,
+    this.controller,
+    this.margin = const EdgeInsets.all(0),
+    this.type = TextInputType.text,
+    this.max,
+    this.min,
+    this.height,
+    this.validate,
+    this.fillColor,
+    this.readOnly = false,
+    this.action,
+    this.submit,
+    this.icon,
+    this.labelColor,
+    this.pass,
+    this.onChange,
+    this.initialValue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,7 @@ class RichTextFiled extends StatelessWidget {
       height: height,
       margin: margin,
       child: TextFormField(
+        //initialValue: initialValue ?? "",
         obscureText: pass == null ? false : pass,
         controller: controller,
         keyboardType: type ?? TextInputType.multiline,
@@ -52,7 +56,7 @@ class RichTextFiled extends StatelessWidget {
         // minLines: min,
         // maxLines: max,
         readOnly: readOnly,
-        style: GoogleFonts.almarai(fontSize: 20, color: MyColors.primary),
+        //style: GoogleFonts.almarai(fontSize: 20, color: MyColors.primary),
         validator: (value) => validate(value),
         onChanged: onChange,
         decoration: InputDecoration(

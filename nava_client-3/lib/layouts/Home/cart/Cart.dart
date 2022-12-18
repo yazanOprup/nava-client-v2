@@ -20,6 +20,7 @@ import 'package:nava/helpers/models/CartModel.dart';
 import 'package:nava/layouts/Home/main/SubCategoryDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../Home.dart';
 import 'AddNotesAndImages.dart';
 import 'Address.dart';
@@ -43,44 +44,11 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 75),
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: MyColors.primary,
-              elevation: 0,
-              title: Text(tr("orderSummary"),
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              // actions: [
-              //   InkWell(
-              //     onTap: () {
-              //       Navigator.of(context).pop();
-              //       Navigator.of(context).pop();
-              //       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c)=>Home()), (route) => false);
-              //       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c)=>Home()), (route) => false);
-              //     },
-              //     child: Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 20),
-              //       child: Icon(
-              //         Icons.add,
-              //         size: 30,
-              //         color: MyColors.white,
-              //       ),
-              //     ),
-              //   )
-              // ],
-            ),
-            AppBarFoot(),
-          ],
-        ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(tr("orderSummary"),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        leading: CustomBackButton(ctx: context),
       ),
       bottomSheet: loading
           ? MyLoading()
@@ -88,11 +56,10 @@ class _CartState extends State<Cart> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * .33,
               decoration: BoxDecoration(
-                  color: MyColors.white,
-                  border: Border.all(color: MyColors.grey, width: .5),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30))),
+                color: MyColors.secondary,
+                //border: Border.all(color: MyColors.grey, width: .5),
+                borderRadius: BorderRadius.circular(5),
+              ),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
@@ -108,11 +75,11 @@ class _CartState extends State<Cart> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
                               child: Text(
-                                cartModel.data.tax,
+                                cartModel.data.tax.toString(),
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: MyColors.primary),
+                                    color: MyColors.black),
                               ),
                             ),
                             Text(
@@ -131,7 +98,9 @@ class _CartState extends State<Cart> {
                           Text(
                             tr("total"),
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Row(
                             children: [
@@ -143,7 +112,7 @@ class _CartState extends State<Cart> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: MyColors.primary),
+                                      color: MyColors.black),
                                 ),
                               ),
                               Text(tr("rs"), style: TextStyle(fontSize: 14)),
@@ -152,30 +121,36 @@ class _CartState extends State<Cart> {
                         ],
                       ),
                     ),
-                    Divider(
-                      thickness: 1.5,
-                    ),
+                    // Divider(
+                    //   thickness: 1.5,
+                    // ),
                     CustomButton(
                       margin: EdgeInsets.only(top: 8),
-                      color: MyColors.white,
-                      textColor: MyColors.primary,
-                      borderColor: MyColors.primary,
+                      //color: MyColors.white,
+                      //textColor: MyColors.primary,
+                      //borderColor: MyColors.primary,
                       title: tr("addNotesAndImages"),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (c) => AddNotesAndImages(
-                                  id: cartModel.data.id,
-                                )));
+                              id: cartModel.data.id,
+                            ),
+                          ),
+                        );
                       },
                     ),
                     CustomButton(
                       margin: EdgeInsets.only(top: 8),
                       title: tr("continue"),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (c) => Address(
-                                  orderId: cartModel.data.id,
-                                )));
+                              orderId: cartModel.data.id,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -184,24 +159,14 @@ class _CartState extends State<Cart> {
             ),
       body: loading
           ? MyLoading()
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: cartModel.data.services.length,
-                      itemBuilder: (c, i) => cartItem(
-                            id: cartModel.data.services[i].id,
-                            index: i,
-                            img: cartModel.data.services[i].image,
-                            title: cartModel.data.services[i].title,
-                          )),
-                  Container(
-                    height: MediaQuery.of(context).size.height * .28,
-                  )
-                ],
+          : ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              itemCount: cartModel.data.services.length,
+              itemBuilder: (c, i) => cartItem(
+                id: cartModel.data.services[i].id,
+                index: i,
+                img: cartModel.data.services[i].image,
+                title: cartModel.data.services[i].title,
               ),
             ),
     );
@@ -218,87 +183,68 @@ class _CartState extends State<Cart> {
       margin: EdgeInsets.only(top: 8),
       padding: EdgeInsets.only(top: 8),
       decoration: BoxDecoration(
-        color: MyColors.white,
+        color: MyColors.secondary,
         borderRadius: BorderRadius.circular(5),
-        border: Border.all(width: .5),
+        //border: Border.all(width: .5),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image(
-                        image: NetworkImage(img),
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.cover,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: MyColors.black,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          title,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        deleteCartItem(id: id.toString());
+                      },
+                      child: Icon(
+                        CupertinoIcons.delete,
+                        color: MyColors.black,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (c) => SubCategoryDetails(
-                                        id: cartModel.data.services[index].id,
-                                        name: cartModel
-                                            .data.services[index].title,
-                                        img: cartModel
-                                            .data.services[index].image,
-                                        categoryId: widget.categoryId,
-                                      )),
-                              (route) => false);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Icon(
-                            Icons.edit,
-                            color: MyColors.primary,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                          onTap: () {
-                            deleteCartItem(id: id.toString());
-                          },
-                          child: Icon(
-                            CupertinoIcons.delete,
-                            color: MyColors.red,
-                          )),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: cartModel.data.services[index].services.length * 30.0,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemCount: cartModel.data.services[index].services.length,
+              itemBuilder: (c, i) => cartServiceItem(
+                title: cartModel.data.services[index].services[i].title,
+                price:
+                    cartModel.data.services[index].services[i].price.toString(),
               ),
             ),
-            Container(
-              height: cartModel.data.services[index].services.length * 30.0,
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemCount: cartModel.data.services[index].services.length,
-                itemBuilder: (c, i) => cartServiceItem(
-                    title: cartModel.data.services[index].services[i].title,
-                    price: cartModel.data.services[index].services[i].price
-                        .toString()),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -311,7 +257,7 @@ class _CartState extends State<Cart> {
         children: [
           Text(
             title,
-            style: TextStyle(color: MyColors.primary),
+            style: TextStyle(color: MyColors.black),
           ),
           Row(
             children: [
@@ -334,7 +280,7 @@ class _CartState extends State<Cart> {
   CartModel cartModel = CartModel();
   Future getCart() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/cart");
+    final url = Uri.http(URL, "api/cart");
     try {
       final response = await http.post(
         url,
@@ -378,7 +324,7 @@ class _CartState extends State<Cart> {
     print(preferences.getString("token"));
     print(cartModel.data.id.toString());
     print(id);
-    final url = Uri.https(URL, "api/delete-cart-item");
+    final url = Uri.http(URL, "api/delete-cart-item");
     try {
       final response = await http.post(
         url,

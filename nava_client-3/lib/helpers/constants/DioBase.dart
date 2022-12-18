@@ -11,7 +11,7 @@ class DioBase {
 
   DioBase.internal();
 
-  String baseUrl = "https://navaservices.net/api/";
+  String baseUrl = "http://navaservices.net/api/";
 
   Dio dio = Dio();
 
@@ -43,7 +43,7 @@ class DioBase {
     dio.options.baseUrl = baseUrl;
     print("--------------------base url = " + baseUrl);
     try {
-      response = await dio.post(url,
+      response = await dio.post(baseUrl + url,
           data: body,
           onSendProgress: progressImage,
           options: Options(headers: headers, requestEncoder: encoding));

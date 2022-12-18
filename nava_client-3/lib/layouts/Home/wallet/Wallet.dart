@@ -117,9 +117,10 @@ class _WalletState extends State<Wallet> {
                     Text(
                       tr("selectPay"),
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.offPrimary),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.offPrimary,
+                      ),
                     ),
                     InkWell(
                       onTap: () {
@@ -155,7 +156,7 @@ class _WalletState extends State<Wallet> {
                       child: Row(
                         children: <Widget>[
                           Radio(
-                              activeColor: MyColors.accent,
+                              activeColor: MyColors.primary,
                               hoverColor: MyColors.white,
                               focusColor: MyColors.white,
                               value: PayType.mada,
@@ -175,20 +176,26 @@ class _WalletState extends State<Wallet> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 CustomButton(
                   title: tr("chargeBalance"),
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  //margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   onTap: () {
                     if (controller.text.isEmpty) {
                       Fluttertoast.showToast(msg: 'من فضلك ادخل قيمة الشحن');
                       return;
                     }
                     if (type == PayType.visa) {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) => ChargeWalletVisa(
-                                amount: int.parse(controller.text),
-                                userId: userId,
-                              )));
+                            amount: int.parse(controller.text),
+                            userId: userId,
+                          ),
+                        ),
+                      );
                     } else if (type == PayType.mada) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -212,7 +219,7 @@ class _WalletState extends State<Wallet> {
 
   Future getWallet() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/wallet");
+    final url = Uri.http(URL, "api/wallet");
     try {
       final response = await http.post(
         url,

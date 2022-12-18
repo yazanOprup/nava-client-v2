@@ -27,6 +27,7 @@ import 'package:nava/helpers/models/TimesModel.dart';
 import 'package:nava/layouts/settings/contact_us/ContactUs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../../../res.dart';
 import '../../settings/contact_us/mainContactUs.dart';
 import 'DetailedBill.dart';
@@ -64,41 +65,11 @@ class _AddressState extends State<Address> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, 75),
-          child: Column(
-            children: [
-              AppBar(
-                backgroundColor: MyColors.primary,
-                elevation: 0,
-                title: Text(tr("address"),
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                actions: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (c) => MainContactUs()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Image(
-                        image: ExactAssetImage(Res.contactus),
-                        width: 26,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              AppBarFoot(),
-            ],
-          ),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(tr("address"),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+          leading: CustomBackButton(ctx: context),
         ),
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -108,11 +79,21 @@ class _AddressState extends State<Address> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("name"),
+                  InkWellTextField(
+                    fillColor: MyColors.secondary,
+                    borderColor: MyColors.secondary,
+                    controller: mapAddress,
+                    label: address ?? tr("mapAddress"),
+                    icon: Icon(
+                      Mdi.mapMarkerRadiusOutline,
+                      color: MyColors.accent,
+                      size: 26,
                     ),
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    onTab: () {
+                      goToLocationScreen();
+                      print("-----> Receipt Address");
+                    },
                   ),
                   LabelTextField(
                     controller: name,
@@ -120,25 +101,12 @@ class _AddressState extends State<Address> {
                     action: TextInputAction.next,
                     margin: EdgeInsets.symmetric(vertical: 8),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("email"),
-                    ),
-                  ),
                   LabelTextField(
                     controller: email,
                     hint: tr('enterEmail'),
                     type: TextInputType.emailAddress,
                     action: TextInputAction.next,
                     margin: EdgeInsets.symmetric(vertical: 8),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("date"),
-                    ),
                   ),
                   InkWellTextField(
                     controller: date,
@@ -153,16 +121,6 @@ class _AddressState extends State<Address> {
                       showDatePicker();
                     },
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("time"),
-                    ),
-                  ),
-
-                  //اضافة الاوقات كل نص ساعه
-
                   InkWellTextField(
                     controller: time,
                     label: selectedTime ?? tr("selectTime"),
@@ -175,34 +133,6 @@ class _AddressState extends State<Address> {
                     onTab: () {
                       openTimes();
                     },
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("mapAddress"),
-                    ),
-                  ),
-                  InkWellTextField(
-                    controller: mapAddress,
-                    label: address ?? tr("mapAddress"),
-                    icon: Icon(
-                      Mdi.mapMarkerRadiusOutline,
-                      color: MyColors.accent,
-                      size: 26,
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 8),
-                    onTab: () {
-                      goToLocationScreen();
-                      print("-----> Receipt Address");
-                    },
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("city"),
-                    ),
                   ),
                   InkWellTextField(
                     controller: neighbor,
@@ -217,13 +147,8 @@ class _AddressState extends State<Address> {
                       openNeighbors();
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      tr("notes"),
-                    ),
-                  ),
                   LabelTextField(
+                    hint: tr("notes"),
                     controller: notes,
                     label: tr("notes"),
                     action: TextInputAction.done,
@@ -335,10 +260,11 @@ class _AddressState extends State<Address> {
           title: Center(
               child: Text(
             tr("selectCity"),
-            style: GoogleFonts.almarai(
-                fontSize: 18,
-                color: MyColors.offPrimary,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              color: MyColors.offPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           )),
           actions: <Widget>[
             Container(

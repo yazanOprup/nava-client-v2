@@ -36,8 +36,11 @@ class _ProcessingOrdersState extends State<ProcessingOrders> {
                   title: tr("noOrders"),
                   widget: Container(),
                 )
-              : ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+              : ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: 10,
+                      ),
+                  padding: EdgeInsets.all(20),
                   itemCount: processingOrdersModel.data.length,
                   itemBuilder: (c, i) {
                     return orderItem(
@@ -66,93 +69,75 @@ class _ProcessingOrdersState extends State<ProcessingOrders> {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(top: 18, right: 12, left: 12),
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: EdgeInsets.all(10),
+        // margin: EdgeInsets.only(top: 18, right: 12, left: 12),
+        // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: Colors.grey.shade400),
+          //color: MyColors.white,
+          borderRadius: BorderRadius.circular(5),
+          //border: Border.all(color: Colors.grey.shade400),
+          color: MyColors.containerColor,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(image: NetworkImage(icon)),
-                      ),
-                    ),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Text(
+                  tr("totalPrice"),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(status,
-                      style: TextStyle(fontSize: 14, color: MyColors.green)),
+                Text(
+                  price + " " + tr("rs"),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    tr("totalPrice"),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    price + " " + tr("rs"),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+            // Divider(
+            //   thickness: 1,
+            //   height: 2,
+            //   color: Colors.grey.shade400,
+            //   indent: 8,
+            //   endIndent: 8,
+            // ),
+            SizedBox(
+              height: 5,
             ),
-            Divider(
-              thickness: 1,
-              height: 2,
-              color: Colors.grey.shade400,
-              indent: 8,
-              endIndent: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(tr("orderNum"),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  Text(
-                    orderNum,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  tr("orderNum"),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
+                ),
+                Text(
+                  orderNum,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
             Visibility(
               visible: roomId != 0,
@@ -172,10 +157,13 @@ class _ProcessingOrdersState extends State<ProcessingOrders> {
                         splashColor: MyColors.primary,
                         borderRadius: BorderRadius.circular(8),
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
                               builder: (_) => ChatScreen(
-                                    roomId: roomId,
-                                  )));
+                                roomId: roomId,
+                              ),
+                            ),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),

@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:label="nava"
-        android:icon="@mipmap/launcher_icon">
-        android:usesCleartextTraffic="true"
+        android:icon="@mipmap/launcher_icon"
+        android:usesCleartextTraffic="true">
+        
+
 
 
         <meta-data

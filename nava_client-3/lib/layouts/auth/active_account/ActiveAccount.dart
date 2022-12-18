@@ -261,12 +261,14 @@ class _ActiveAccountState extends State<ActiveAccount> {
   Future activeAccount() async {
     setState(() => loading = true);
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    print(preferences.getString("fcm_token"));
+    print(preferences.getString("device_id"));
+    print(uuid);
+
     Uri url = Uri.http(URL, "api/active-code", {
       "lang": preferences.getString("lang"),
       "phone": "${widget.phone}",
       "code": "${code.text}",
-      "device_id": preferences.getString("fcm_token"),
+      "device_id": preferences.getString("device_id"),
       "device_type": Platform.isIOS ? "ios" : "android",
       "uuid": "$uuid",
     });
@@ -287,7 +289,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
           VisitorProvider visitorProvider =
               Provider.of<VisitorProvider>(context, listen: false);
           visitorProvider.visitor = false;
-
+          //print(responseData);
           UserProvider userProvider =
               Provider.of<UserProvider>(context, listen: false);
           userProvider.user.id = responseData["data"]["user"]["id"];

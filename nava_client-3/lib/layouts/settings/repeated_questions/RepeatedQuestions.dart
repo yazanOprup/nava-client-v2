@@ -46,7 +46,6 @@ class _FQsState extends State<FQs> {
               ? Expanded(child: MyLoading())
               : Container(
                   height: MediaQuery.of(context).size.height * .82,
-                  
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: fQsModel.data.length,
@@ -80,15 +79,18 @@ class _FQsState extends State<FQs> {
             height: 50,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color:
-                    open ? MyColors.primary : MyColors.primary.withOpacity(.2),
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(5)),
-                border: Border.all(
-                    width: 1.5, color: MyColors.grey.withOpacity(.4))),
+              color: open ? MyColors.primary : MyColors.containerColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+              ),
+              // border: Border.all(
+              //   width: 1.5,
+              //   color: MyColors.grey.withOpacity(.4),
+              // ),
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
@@ -116,12 +118,15 @@ class _FQsState extends State<FQs> {
                   // height: 80,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: MyColors.offWhite,
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10)),
-                      border: Border.all(
-                          width: 1.5, color: MyColors.grey.withOpacity(.4))),
+                    color: MyColors.containerColor,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10)),
+                    border: Border.all(
+                      width: 1.5,
+                      color: MyColors.grey.withOpacity(.4),
+                    ),
+                  ),
                   child: Text(
                     answer,
                     style: TextStyle(

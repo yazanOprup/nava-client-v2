@@ -128,7 +128,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                 children: <Widget>[
                   ProcessingOrders(),
                   FinishedOrders(),
-                  Container()
+                 Container()
                 ],
               ),
             ),

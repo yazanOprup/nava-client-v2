@@ -16,6 +16,7 @@ import 'package:nava/layouts/Home/orders/OrderDetails.dart';
 import 'package:nava/layouts/settings/contact_us/ContactUs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../../../res.dart';
 import '../contact_us/mainContactUs.dart';
 
@@ -34,59 +35,26 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 66),
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: MyColors.primary,
-              elevation: 0,
-              title: Text(tr("noti"),
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              actions: [
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (c) => MainContactUs()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Image(
-                      image: ExactAssetImage(Res.contactus),
-                      width: 26,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            AppBarFoot(),
-          ],
-        ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(tr("noti"),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        leading: CustomBackButton(ctx: context),
       ),
       body: loading
           ? MyLoading()
-          : Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: ExactAssetImage(Res.splash), fit: BoxFit.cover)),
-              child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  itemCount: notificationsModel.data.data.length,
-                  itemBuilder: (c, i) {
-                    return notificationItem(
-                        id: notificationsModel.data.data[i].id,
-                        title: notificationsModel.data.data[i].message,
-                        time: notificationsModel.data.data[i].createdAt,
-                        orderId: notificationsModel.data.data[i].orderId);
-                  }),
-            ),
+          : ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(height: 10,),
+              padding: EdgeInsets.all(20),
+              itemCount: notificationsModel.data.data.length,
+              itemBuilder: (c, i) {
+                return notificationItem(
+                  id: notificationsModel.data.data[i].id,
+                  title: notificationsModel.data.data[i].message,
+                  time: notificationsModel.data.data[i].createdAt,
+                  orderId: notificationsModel.data.data[i].orderId,
+                );
+              }),
     );
   }
 
@@ -94,10 +62,13 @@ class _NotificationsState extends State<Notifications> {
     return GestureDetector(
       onTap: () {
         if (orderId != 0)
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).push(
+            MaterialPageRoute(
               builder: (context) => OrderDetails(
-                    id: orderId,
-                  )));
+                id: orderId,
+              ),
+            ),
+          );
       },
       child: Dismissible(
         direction: DismissDirection.startToEnd,
@@ -166,50 +137,65 @@ class _NotificationsState extends State<Notifications> {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 70,
-          margin: EdgeInsets.only(top: 8),
+          //height: 70,
+          //margin: EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.accent, width: 1),
-              borderRadius: BorderRadius.circular(15)),
-          child: Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: MyColors.offWhite,
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(width: 1, color: MyColors.grey),
-                  image: DecorationImage(
-                      image: ExactAssetImage(Res.logo, scale: 15)),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      width: MediaQuery.of(context).size.width * .7,
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: MyColors.offPrimary,
-                            fontWeight: FontWeight.bold),
-                      )),
-                  Text(
-                    time,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: MyColors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            color: MyColors.containerColor,
+            //border: Border.all(color: MyColors.accent, width: 1),
+            borderRadius: BorderRadius.circular(5),
           ),
+          child: ListTile(
+            title: Text(
+              title,
+              style: TextStyle(color: MyColors.grey),
+            ),
+            trailing: Text(
+              time,
+              style: TextStyle(
+                color: MyColors.grey,
+              ),
+            ),
+          ),
+          // child: Row(
+          //   children: [
+          //     Container(
+          //       width: 60,
+          //       height: 60,
+          //       margin: EdgeInsets.symmetric(horizontal: 10),
+          //       decoration: BoxDecoration(
+          //         color: MyColors.offWhite,
+          //         borderRadius: BorderRadius.circular(50),
+          //         border: Border.all(width: 1, color: MyColors.grey),
+          //         image: DecorationImage(
+          //           image: ExactAssetImage(Res.logo, scale: 15),
+          //         ),
+          //       ),
+          //     ),
+          //     Column(
+          //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Container(
+          //           width: MediaQuery.of(context).size.width * .7,
+          //           child: Text(
+          //             title,
+          //             style: TextStyle(
+          //                 fontSize: 14,
+          //                 color: MyColors.offPrimary,
+          //                 fontWeight: FontWeight.bold),
+          //           ),
+          //         ),
+          //         Text(
+          //           time,
+          //           style: TextStyle(
+          //             fontSize: 12,
+          //             color: MyColors.grey,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
         ),
       ),
     );
@@ -219,7 +205,7 @@ class _NotificationsState extends State<Notifications> {
   NotificationsModel notificationsModel = NotificationsModel();
   Future getNotifications() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL,"api/notifications");
+    final url = Uri.http(URL, "api/notifications");
     try {
       final response = await http.post(
         url,

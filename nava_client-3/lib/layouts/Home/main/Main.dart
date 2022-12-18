@@ -276,30 +276,6 @@ class _MainState extends State<Main> {
                 },
               ),
 
-              // Stack(
-              //   children: [
-              //     Container(
-              //       width: MediaQuery.of(context).size.width,
-              //       height: 60,
-              //       decoration: BoxDecoration(
-              //           //color: MyColors.primary,
-              //           borderRadius: BorderRadius.only(
-              //               bottomLeft: Radius.circular(20),
-              //               bottomRight: Radius.circular(20))),
-              //     ),
-              //     RichTextFiled(
-              //       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              //       height: 45,
-              //       icon: Icon(Icons.search),
-              //       controller: search,
-              //       label: tr("searchWord"),
-              //       labelColor: MyColors.grey,
-              //       onChange: (word) {
-              //         getSearch();
-              //       },
-              //     ),
-              //   ],
-              // ),
               loading
                   ? Container(
                       height: MediaQuery.of(context).size.height * .5,
@@ -576,7 +552,7 @@ class _MainState extends State<Main> {
         if (responseData["key"] == "success") {
           homeModel = HomeModel.fromJson(responseData);
         } else {
-          // Fluttertoast.showToast(msg: responseData["msg"]);
+           Fluttertoast.showToast(msg: responseData["msg"]);
         }
       }
     } catch (e, t) {

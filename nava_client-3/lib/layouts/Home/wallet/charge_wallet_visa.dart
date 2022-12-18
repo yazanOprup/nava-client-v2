@@ -6,6 +6,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nava/helpers/constants/DioBase.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
+import 'package:nava/helpers/customs/CustomBackButton.dart';
 
 import '../Home.dart';
 
@@ -75,18 +76,16 @@ class _ChargeWalletVisaState extends State<ChargeWalletVisa> {
     return WebviewScaffold(
       key: _scafold,
       appBar: AppBar(
-        backgroundColor: MyColors.primary,
-        elevation: 0,
+        // backgroundColor: MyColors.primary,
+        // elevation: 0,
         title: Text(tr("visa"),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-        leading: BackButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: CustomBackButton(
+          ctx: context,
         ),
       ),
       url:
-          "https://navaservices.net/api/pay-wallet-visa?amount=${widget.amount}&user_id=${widget.userId}",
+          "http://navaservices.net/api/pay-wallet-visa?amount=${widget.amount}&user_id=${widget.userId}",
     );
   }
 }

@@ -107,7 +107,7 @@ class ServiceService {
   int id;
   String title;
   int price;
-  int count;
+  String count;
 
   factory ServiceService.fromJson(Map<String, dynamic> json) => ServiceService(
     id: json["id"],

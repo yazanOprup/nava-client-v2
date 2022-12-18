@@ -53,7 +53,7 @@ class _LabelTextFieldState extends State<LabelTextField> {
             maxWidth: widget.maxWidth ?? double.infinity),
         child: TextFormField(
           initialValue: widget.initialValue,
-
+        
           maxLines: widget.lines ?? 1,
           // minLines: widget.lines??1,
           controller: widget.controller,
@@ -65,9 +65,10 @@ class _LabelTextFieldState extends State<LabelTextField> {
           enableSuggestions: false,
           autocorrect: false,
           textInputAction: widget.action ?? TextInputAction.done,
-          style: GoogleFonts.almarai(fontSize: 16, color: Colors.black),
+          //style: GoogleFonts.almarai(fontSize: 16, color: Colors.black),
           validator: (value) => widget.validate(value),
           decoration: InputDecoration(
+            
             hintStyle: TextStyle(color: MyColors.offPrimary),
             alignLabelWithHint: true,
             enabledBorder: OutlineInputBorder(

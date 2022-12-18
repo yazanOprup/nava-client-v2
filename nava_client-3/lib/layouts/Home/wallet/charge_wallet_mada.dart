@@ -6,8 +6,11 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nava/helpers/constants/DioBase.dart';
 import 'package:nava/helpers/constants/MyColors.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
 import '../Home.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChargeWalletMada extends StatefulWidget {
   final int amount;
@@ -25,10 +28,29 @@ class _ChargeWalletMadaState extends State<ChargeWalletMada> {
   StreamSubscription<String> _onUrlChanged;
   StreamSubscription<WebViewStateChanged> _onStateChanged;
   DioBase dioBase = DioBase();
+  WebViewController _controller = WebViewController();
+
   @override
   void initState() {
+    
     // TODO: implement initState
+   
     super.initState();
+    //  _controller
+    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    //   ..setNavigationDelegate(
+    //     NavigationDelegate(
+    //       onProgress: (int progress) {
+    //         // Update loading bar.
+    //       },
+    //       onPageStarted: (String url) {},
+    //       onPageFinished: (String url) {},
+    //       onWebResourceError: (WebResourceError error) {},
+    //     ),
+    //   )
+    //   ..loadRequest(Uri.parse(
+    //       'http://navaservices.net/api/pay-wallet-mada?amount=${widget.amount}&user_id=${widget.userId}'));
+
     print("----------------initState------------");
     flutterWebViewPlugin.close();
     _onDestroy = flutterWebViewPlugin.onDestroy.listen((_) {
@@ -38,7 +60,7 @@ class _ChargeWalletMadaState extends State<ChargeWalletMada> {
     _onUrlChanged =
         flutterWebViewPlugin.onUrlChanged.listen((String url) async {
       if (mounted) {
-        if (url == 'https://navaservices.net/api/success') {
+        if (url == 'http://navaservices.net/api/success') {
           Fluttertoast.showToast(msg: "walletHasBeenCharged".tr());
           // Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pushAndRemoveUntil(
@@ -48,7 +70,7 @@ class _ChargeWalletMadaState extends State<ChargeWalletMada> {
                 ),
               ),
               (route) => false);
-        } else if (url == 'https://navaservices.net/api/fail') {
+        } else if (url == 'http://navaservices.net/api/fail') {
           Fluttertoast.showToast(msg: "walletHasn'tBeenCharged".tr());
           // Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();
@@ -74,18 +96,16 @@ class _ChargeWalletMadaState extends State<ChargeWalletMada> {
     return WebviewScaffold(
       key: _scafold,
       appBar: AppBar(
-        backgroundColor: MyColors.primary,
-        elevation: 0,
+        // backgroundColor: MyColors.primary,
+        // elevation: 0,
         title: Text(tr("mada"),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-        leading: BackButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: CustomBackButton(
+          ctx: context,
         ),
       ),
       url:
-          "https://navaservices.net/api/pay-wallet-mada?amount=${widget.amount}&user_id=${widget.userId}",
+          "http://navaservices.net/api/pay-wallet-mada?amount=${widget.amount}&user_id=${widget.userId}",
     );
   }
 }

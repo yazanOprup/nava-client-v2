@@ -8,6 +8,8 @@ import 'package:nava/helpers/constants/MyColors.dart';
 import 'package:nava/helpers/customs/CustomButton.dart';
 import 'package:nava/helpers/customs/Loading.dart';
 
+import '../../../helpers/customs/CustomBackButton.dart';
+
 class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -104,19 +106,12 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.withOpacity(0.3),
-        elevation: 0,
-        title: Text(
-          tr("selectLocation"),
-          style: TextStyle(color: MyColors.white, fontSize: 18),
-        ),
-        iconTheme: IconThemeData(color: MyColors.white),
-        leading: InkWell(
-            onTap: () {
-              Navigator.pop(context, [userLocation, currentLat, currentLng]);
-            },
-            child: Icon(Icons.arrow_back_ios)),
+        automaticallyImplyLeading: false,
+        title: Text(tr("selectLocation"),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        leading: CustomBackButton(ctx: context),
       ),
+      
       body: currentLat == null && currentLng == null
           ? Center(
               child: MyLoading(),
@@ -242,15 +237,12 @@ class _MapScreenState extends State<MapScreen> {
 
   Widget _confirmButton(BuildContext context) {
     return CustomButton(
-      color: MyColors.white,
+      //color: MyColors.white,
       title: tr("chooseCurrentLocation"),
-      borderColor: MyColors.primary,
-      textColor: MyColors.primary,
+      //borderColor: MyColors.primary,
+      //textColor: MyColors.primary,
       width: MediaQuery.of(context).size.width,
       onTap: () {
-        // print(userLocation);
-        // print(currentLat);
-        // print(currentLng);
         Navigator.pop(context, [userLocation, currentLat, currentLng]);
       },
     );
