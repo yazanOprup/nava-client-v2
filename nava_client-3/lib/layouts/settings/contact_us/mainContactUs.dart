@@ -320,7 +320,7 @@ class _MainContactUsState extends State<MainContactUs> {
   ContactModel contactModel = ContactModel();
   Future getContact() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(URL, "api/site-data");
+    final url = Uri.http(URL, "api/site-data");
     try {
       final response = await http.get(
         url,
@@ -345,12 +345,31 @@ class _MainContactUsState extends State<MainContactUs> {
 }
 
 class SocialIcon extends StatelessWidget {
-    final FaIcon icon;
-    final String url;
-    SocialIcon({this.icon,this.url});
-  
-    @override
-    Widget build(BuildContext context) {
-      return IconButton(onPressed: (){}, icon: icon);
+  final FaIcon icon;
+  final String url;
+  SocialIcon({this.icon, this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () async {
+          await launchURL(url: url);
+        },
+        icon: icon,);
+  }
+
+  Future launchURL({String url}) async {
+    if (!url.toString().startsWith("https")) {
+      url = "https://" + url;
+    }
+    if (await launchUrl(Uri.parse(url))) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(
+        msg: "checkLink",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
+}

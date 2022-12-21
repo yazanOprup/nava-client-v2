@@ -90,12 +90,11 @@ class _OrderDetailsState extends State<OrderDetails> {
     getOrderDetails();
     super.initState();
   }
-  
 
   double calculateTotalPrice() {
     double total = 0;
     orderDetailsModel.data.details.services.forEach((element) {
-      total+= element.total;
+      total += element.total;
     });
     return total;
   }
@@ -133,8 +132,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     'wallet' ||
                                 orderDetailsModel.data.details.payType == '') {
                               payWithWalletOrCash(
-                                      orderDetailsModel.data.details.id)
-                                  .then(
+                                orderDetailsModel.data.details.id,
+                              ).then(
                                 (value) {
                                   if (value == 'success') {
                                     //notification add here
@@ -169,10 +168,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 // print("Value Rating : "+ rating.toString());
                                                 // print("Value Comment : "+commentText.toString());
                                                 Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            SuccessfulOrder()));
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SuccessfulOrder(),
+                                                  ),
+                                                );
                                               });
                                         });
                                   }
@@ -478,7 +479,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ),
 
-                
                 SizedBox(
                   height: 10,
                 ),
@@ -979,7 +979,9 @@ class _OrderDetailsState extends State<OrderDetails> {
           return responseData["key"];
         }
       }
+      EasyLoading.dismiss();
     } catch (e, t) {
+      EasyLoading.dismiss();
       print("error $e   track $t");
     }
   }

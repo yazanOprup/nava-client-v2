@@ -181,16 +181,6 @@ class _LoginState extends State<Login> {
   bool loading = false;
   DioBase dioBase = DioBase();
   Future login() async {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (c) => ActiveAccount(
-    //       phone: _phone.text,
-    //     ),
-    //   ),
-    // );
-    // return Future.delayed(
-    //   Duration(seconds: 0),
-    // );
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     String deviceId = await _getId();
@@ -206,7 +196,9 @@ class _LoginState extends State<Login> {
       print("========> login02");
       final response = await http.post(
         url,
-        headers: {"Bearer": "484d8a6dc6df4f00f5b7d995491a9bcd"},
+        headers: {
+          "Bearer": "484d8a6dc6df4f00f5b7d995491a9bcd",
+        },
         body: {
           "phone": _phone.text,
           "lang": preferences.getString("lang"),

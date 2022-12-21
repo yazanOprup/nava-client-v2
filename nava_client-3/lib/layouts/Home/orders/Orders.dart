@@ -21,7 +21,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 3, vsync: this,initialIndex: 0);
+    _controller = TabController(length: 2, vsync: this,initialIndex: 0);
 
     _controller.addListener(() {
       setState(() {
@@ -98,22 +98,22 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: currentIndex == 2
-                      ? MyColors.primary
-                      : MyColors.containerColor,
-                ),
-                child: Text(
-                  tr("guarantee"),
-                  style: TextStyle(
-                    color: currentIndex == 2 ? Colors.white : Colors.grey,
-                  ),
-                ),
-              ),
+              // Container(
+              //   alignment: Alignment.center,
+              //   padding: EdgeInsets.all(20),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(5),
+              //     color: currentIndex == 2
+              //         ? MyColors.primary
+              //         : MyColors.containerColor,
+              //   ),
+              //   child: Text(
+              //     tr("guarantee"),
+              //     style: TextStyle(
+              //       color: currentIndex == 2 ? Colors.white : Colors.grey,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -128,7 +128,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                 children: <Widget>[
                   ProcessingOrders(),
                   FinishedOrders(),
-                 Container()
+                //  Container()
                 ],
               ),
             ),

@@ -67,7 +67,7 @@ class Datum {
   });
 
   String id;
-  int toId;
+  String toId;
   String message;
   bool seen;
   String type;

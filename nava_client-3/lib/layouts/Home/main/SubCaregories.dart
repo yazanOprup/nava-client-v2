@@ -47,23 +47,23 @@ class _SubCategoriesState extends State<SubCategories> {
       body: loading
           ? MyLoading()
           : GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 3 / 2,
                 crossAxisCount: 1,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
               ),
-          padding: EdgeInsets.all(20),
-          physics: BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          itemCount: subCategoriesModel.data.length,
-          itemBuilder: (c, i) {
-            return subCategoryItem(
-              id: subCategoriesModel.data[i].id,
-              img: subCategoriesModel.data[i].image,
-              title: subCategoriesModel.data[i].title,
-            );
-          }),
+              padding: EdgeInsets.all(20),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              itemCount: subCategoriesModel.data.length,
+              itemBuilder: (c, i) {
+                return subCategoryItem(
+                  id: subCategoriesModel.data[i].id,
+                  img: subCategoriesModel.data[i].image,
+                  title: subCategoriesModel.data[i].title,
+                );
+              }),
     );
   }
 
@@ -74,9 +74,16 @@ class _SubCategoriesState extends State<SubCategories> {
         //     Provider.of<VisitorProvider>(context, listen: false);
         // visitorProvider.visitor
         //     ? LoadingDialog.showAuthDialog(context: context)
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(
+          MaterialPageRoute(
             builder: (c) => SubCategoryDetails(
-                id: id, categoryId: widget.id, name: title, img: img)));
+              id: id,
+              categoryId: widget.id,
+              name: title,
+              img: img,
+            ),
+          ),
+        );
       },
       child: Card(
         elevation: 0.5,

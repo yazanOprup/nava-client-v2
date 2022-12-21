@@ -212,7 +212,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Chat chat = Chat();
   Future getChat() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(
+    final url = Uri.http(
       URL,
       "api/chat",
       {
@@ -246,7 +246,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future sendMessage(String message) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(
+    final url = Uri.http(
       URL,
       "api/sendMessage",
       {

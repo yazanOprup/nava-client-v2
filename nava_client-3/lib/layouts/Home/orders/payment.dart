@@ -320,7 +320,7 @@ class _PayState extends State<Pay> {
     }
     LoadingDialog.showLoadingDialog();
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    final url = Uri.https(
+    final url = Uri.http(
       URL,
       endPoint,
       {
