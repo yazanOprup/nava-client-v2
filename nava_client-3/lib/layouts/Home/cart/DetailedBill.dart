@@ -544,7 +544,7 @@ class _DetailedBillState extends State<DetailedBill> {
                         onTap: () {
                           setState(() {
                             type = PayType.mada;
-                            payment = "apple";
+                            payment = "mada";
                           });
                           print(payment);
                         },
@@ -887,7 +887,7 @@ class _DetailedBillState extends State<DetailedBill> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print("${preferences.getString("token")}");
     print(widget.orderId);
-    // print(payment);
+    print(payment);
     final url = Uri.http(URL, "api/place-order");
     try {
       final response = await http.post(url, body: {

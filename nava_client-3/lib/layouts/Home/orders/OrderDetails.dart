@@ -124,14 +124,20 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ? CustomButton(
                           margin: EdgeInsets.symmetric(vertical: 15),
                           title: tr("payingOff"),
-                          width: MediaQuery.of(context).size.width,
-                          onTap: () {
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          onTap: () async {
+                            print("====================================");
+                            print(orderDetailsModel.data.payType);
+                            print("====================================");
                             if (orderDetailsModel.data.details.payType ==
                                     'cash' ||
                                 orderDetailsModel.data.details.payType ==
+                                    "كاش" ||
+                                orderDetailsModel.data.details.payType ==
                                     'wallet' ||
-                                orderDetailsModel.data.details.payType == '') {
-                              payWithWalletOrCash(
+                                orderDetailsModel.data.details.payType ==
+                                    "محفطه") {
+                              await payWithWalletOrCash(
                                 orderDetailsModel.data.details.id,
                               ).then(
                                 (value) {
@@ -158,7 +164,83 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 color: Color(0xff2BC3F3),
                                               ),
                                               submitButtonText: tr('done'),
-                                              onSubmitted: (response) {
+                                              onSubmitted: (response) async {
+                                                SharedPreferences preferences =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                try {
+                                                  LoadingDialog
+                                                      .showLoadingDialog();
+                                                  final url = Uri.http(URL,
+                                                      "api/rate-order-tech");
+                                                  final httpResponse =
+                                                      await http.post(
+                                                    url,
+                                                    headers: {
+                                                      "Authorization":
+                                                          "Bearer ${preferences.getString("token")}",
+                                                    },
+                                                    body: {
+                                                      "order_id":
+                                                          orderDetailsModel
+                                                              .data.details.id,
+                                                      "rate": response.rating,
+                                                      "comment":
+                                                          response.comment,
+                                                      "lang": preferences
+                                                          .getString("lang"),
+                                                    },
+                                                  ).timeout(
+                                                    Duration(seconds: 10),
+                                                    onTimeout: () =>
+                                                        throw 'no internet please connect to internet',
+                                                  );
+                                                  final responseData =
+                                                      json.decode(
+                                                          httpResponse.body);
+                                                  if (httpResponse.statusCode ==
+                                                      200) {
+                                                    EasyLoading.dismiss();
+                                                    print(responseData);
+                                                    if (responseData["key"] ==
+                                                        "success") {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              SuccessfulOrder(),
+                                                        ),
+                                                      );
+                                                      Fluttertoast.showToast(
+                                                          msg: responseData[
+                                                              "msg"]);
+                                                    } else {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              SuccessfulOrder(),
+                                                        ),
+                                                      );
+                                                      Fluttertoast.showToast(
+                                                          msg: responseData[
+                                                              "msg"]);
+                                                    }
+                                                  }
+                                                } catch (e, t) {
+                                                  EasyLoading.dismiss();
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SuccessfulOrder(),
+                                                    ),
+                                                  );
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          "Somthing went wrong for rating");
+                                                  print("error $e   track $t");
+                                                }
                                                 print(
                                                     "OnSubmitPressed rating = ${response.rating}");
                                                 print(
@@ -167,13 +249,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 // commentText="${response.rating}";
                                                 // print("Value Rating : "+ rating.toString());
                                                 // print("Value Comment : "+commentText.toString());
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SuccessfulOrder(),
-                                                  ),
-                                                );
                                               });
                                         });
                                   }
@@ -181,11 +256,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                               );
                             } else if (orderDetailsModel.data.details.payType ==
                                 'visa') {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (c) => VisaWebView(
-                                        orderId:
-                                            orderDetailsModel.data.details.id,
-                                      )));
+                                    orderId: orderDetailsModel.data.details.id,
+                                  ),
+                                ),
+                              );
                             } else if (orderDetailsModel.data.details.payType ==
                                 'mada') {
                               Navigator.of(context).push(
@@ -307,167 +384,150 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ],
               ),
             ),
-      body: loading
-          ? MyLoading()
-          : ListView(
-              padding: EdgeInsets.all(20),
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: MyColors.containerColor),
-                  child: Column(
-                    children: [
-                      followItem(
-                        title: orderDetailsModel.data.allStatus.created,
-                        done: orderDetailsModel.data.status == "created"
-                            ? true
-                            : false,
-                        location: "top",
-                      ),
-                      followItem(
-                        title: orderDetailsModel.data.allStatus.accepted,
-                        done: orderDetailsModel.data.status == "accepted"
-                            ? true
-                            : false,
-                        location: "",
-                      ),
-                      followItem(
-                          title: orderDetailsModel.data.allStatus.arrived,
-                          done: orderDetailsModel.data.status == "arrived"
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: loading
+            ? MyLoading()
+            : ListView(
+                padding: EdgeInsets.all(20),
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: MyColors.containerColor),
+                    child: Column(
+                      children: [
+                        followItem(
+                          title: orderDetailsModel.data.allStatus.created,
+                          done: orderDetailsModel.data.status == "created"
                               ? true
                               : false,
-                          location: ""),
-                      followItem(
-                          title: orderDetailsModel.data.allStatus.inProgress,
-                          done: orderDetailsModel.data.status == "in-progress"
+                          location: "top",
+                        ),
+                        followItem(
+                          title: orderDetailsModel.data.allStatus.accepted,
+                          done: orderDetailsModel.data.status == "accepted"
                               ? true
                               : false,
-                          location: ""),
-                      Visibility(
-                        visible: orderDetailsModel.data.invoice,
-                        child: followItem(
-                            title: ("thereIsNewInvoice").tr(),
-                            done: orderDetailsModel.data.status == "new-invoice"
+                          location: "",
+                        ),
+                        followItem(
+                            title: orderDetailsModel.data.allStatus.arrived,
+                            done: orderDetailsModel.data.status == "arrived"
                                 ? true
                                 : false,
                             location: ""),
-                      ),
-                      followItem(
-                          title: orderDetailsModel.data.allStatus.finished,
-                          done: orderDetailsModel.data.status == "finished"
-                              ? true
-                              : false,
-                          location: "end"),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: MyColors.containerColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        "${tr("category")}: ",
-                        style: TextStyle(color: MyColors.grey),
-                      ),
-                      Text(
-                        orderDetailsModel.data.details.categoryTitle,
-                        style: TextStyle(
-                            //fontSize: 18,
-                            //fontWeight: FontWeight.bold,
-                            fontFamily: 'Tajawal-Bold'),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: MyColors.containerColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          tr("address"),
-                          style: TextStyle(fontFamily: 'Tajawal-Bold'),
+                        followItem(
+                            title: orderDetailsModel.data.allStatus.inProgress,
+                            done: orderDetailsModel.data.status == "in-progress"
+                                ? true
+                                : false,
+                            location: ""),
+                        Visibility(
+                          visible: orderDetailsModel.data.invoice,
+                          child: followItem(
+                              title: ("thereIsNewInvoice").tr(),
+                              done:
+                                  orderDetailsModel.data.status == "new-invoice"
+                                      ? true
+                                      : false,
+                              location: ""),
                         ),
-                        trailing: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: MyColors.primary,
-                            elevation: 0,
-                          ),
-                          onPressed: () async {
-                            final coords = map.Coords(
-                                orderDetailsModel.data.details.lat,
-                                orderDetailsModel.data.details.lng);
-                            if (await map.MapLauncher.isMapAvailable(
-                                map.MapType.google)) {
-                              await map.MapLauncher.showMarker(
-                                mapType: map.MapType.google,
-                                coords: coords,
-                                title: 'عنوان العميل',
-                                description:
-                                    orderDetailsModel.data.details.street,
-                              );
-                            } else if (await map.MapLauncher.isMapAvailable(
-                                map.MapType.apple)) {
-                              await map.MapLauncher.showMarker(
-                                mapType: map.MapType.apple,
-                                coords: coords,
-                                title: 'عنوان العميل',
-                                description: '',
-                              );
-                            }
-                            // MapsLauncher.launchCoordinates(
-                            //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
-                          },
-                          child: Text(tr("showMap")),
+                        followItem(
+                            title: orderDetailsModel.data.allStatus.finished,
+                            done: orderDetailsModel.data.status == "finished"
+                                ? true
+                                : false,
+                            location: "end"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "${tr("category")}: ",
+                          style: TextStyle(color: MyColors.grey),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "${tr("city")} : ",
-                            style: TextStyle(fontSize: 15),
+                        Text(
+                          orderDetailsModel.data.details.categoryTitle,
+                          style: TextStyle(
+                              //fontSize: 18,
+                              //fontWeight: FontWeight.bold,
+                              fontFamily: 'Tajawal-Bold'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            tr("address"),
+                            style: TextStyle(fontFamily: 'Tajawal-Bold'),
                           ),
-                          Text(
-                            orderDetailsModel.data.details.region,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                          trailing: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.primary,
+                              elevation: 0,
                             ),
+                            onPressed: () async {
+                              final coords = map.Coords(
+                                  orderDetailsModel.data.details.lat,
+                                  orderDetailsModel.data.details.lng);
+                              if (await map.MapLauncher.isMapAvailable(
+                                  map.MapType.google)) {
+                                await map.MapLauncher.showMarker(
+                                  mapType: map.MapType.google,
+                                  coords: coords,
+                                  title: 'عنوان العميل',
+                                  description:
+                                      orderDetailsModel.data.details.street,
+                                );
+                              } else if (await map.MapLauncher.isMapAvailable(
+                                  map.MapType.apple)) {
+                                await map.MapLauncher.showMarker(
+                                  mapType: map.MapType.apple,
+                                  coords: coords,
+                                  title: 'عنوان العميل',
+                                  description: '',
+                                );
+                              }
+                              // MapsLauncher.launchCoordinates(
+                              //     cartDetailsModel.data.lat, cartDetailsModel.data.lng);
+                            },
+                            child: Text(tr("showMap")),
                           ),
-                        ],
-                      ),
-                      if (orderDetailsModel
-                          .data.details.addressNotes.isNotEmpty)
-                        SizedBox(
-                          height: 10,
                         ),
-                      if (orderDetailsModel
-                          .data.details.addressNotes.isNotEmpty)
                         Row(
                           children: [
                             Text(
-                              "${tr("addedNotes")} : ",
+                              "${tr("city")} : ",
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
-                              orderDetailsModel.data.details.addressNotes,
+                              orderDetailsModel.data.details.region,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -475,214 +535,238 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ],
                         ),
-                    ],
+                        if (orderDetailsModel
+                            .data.details.addressNotes.isNotEmpty)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (orderDetailsModel
+                            .data.details.addressNotes.isNotEmpty)
+                          Row(
+                            children: [
+                              Text(
+                                "${tr("addedNotes")} : ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                orderDetailsModel.data.details.addressNotes,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: MyColors.containerColor,
-                    borderRadius: BorderRadius.circular(5),
+                  SizedBox(
+                    height: 10,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        tr("serviceDetails"),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.offPrimary,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        //height: 260.0 * cartDetailsModel.data.services.length,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:
-                                orderDetailsModel.data.details.services.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (c, i) {
-                              return serviceItem(
-                                index: i,
-                                img: orderDetailsModel
-                                    .data.details.services[i].image,
-                                title: orderDetailsModel
-                                    .data.details.services[i].title,
-                                price: orderDetailsModel
-                                    .data.details.services[i].total
-                                    .toString(),
-                              );
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: MyColors.containerColor,
-                  ),
-                  child: Column(
-                    children: [
-                      if (orderDetailsModel.data.details.bills.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          tr("extraBills"),
-                          style: TextStyle(fontSize: 18),
-                        ).tr(),
-                      ...orderDetailsModel.data.details.bills.map(
-                        (e) => Column(
+                          tr("serviceDetails"),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: MyColors.offPrimary,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          //height: 260.0 * cartDetailsModel.data.services.length,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: orderDetailsModel
+                                  .data.details.services.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (c, i) {
+                                return serviceItem(
+                                  index: i,
+                                  img: orderDetailsModel
+                                      .data.details.services[i].image,
+                                  title: orderDetailsModel
+                                      .data.details.services[i].title,
+                                  price: orderDetailsModel
+                                      .data.details.services[i].total
+                                      .toString(),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: MyColors.containerColor,
+                    ),
+                    child: Column(
+                      children: [
+                        if (orderDetailsModel.data.details.bills.isNotEmpty)
+                          Text(
+                            tr("extraBills"),
+                            style: TextStyle(fontSize: 18),
+                          ).tr(),
+                        ...orderDetailsModel.data.details.bills.map(
+                          (e) => Column(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(tr("billDetails")),
+                                  Spacer(),
+                                  SizedBox(height: 50, child: Text(e.text)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(tr("vat")),
+                                  Spacer(),
+                                  Text(e.tax.toString()),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(tr("total")),
+                                  Spacer(),
+                                  Text(e.price.toString()),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(tr("billDetails")),
-                                Spacer(),
-                                SizedBox(height: 50, child: Text(e.text)),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
+                            Text(
+                              tr("vat"),
+                              style: TextStyle(fontSize: 16),
                             ),
                             Row(
                               children: [
-                                Text(tr("vat")),
-                                Spacer(),
-                                Text(e.tax.toString()),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Text(tr("total")),
-                                Spacer(),
-                                Text(e.price.toString()),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    orderDetailsModel.data.details.tax
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Text(
+                                  tr("rs"),
+                                  style: TextStyle(
+                                      fontSize: 14, color: MyColors.grey),
+                                ),
                               ],
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            tr("vat"),
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Text(
-                                  orderDetailsModel.data.details.tax.toString(),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              tr("total"),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    orderDetailsModel.data.details.total
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                tr("rs"),
-                                style: TextStyle(
-                                    fontSize: 14, color: MyColors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            tr("total"),
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Text(
-                                  orderDetailsModel.data.details.total
-                                      .toString(),
+                                Text(
+                                  tr("rs"),
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 14, color: MyColors.grey),
                                 ),
-                              ),
-                              Text(
-                                tr("rs"),
-                                style: TextStyle(
-                                    fontSize: 14, color: MyColors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.containerColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      tr("payWay"),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    trailing: Text(
-                      orderDetailsModel.data.payType,
-                      style: TextStyle(
-                        color: MyColors.offPrimary,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        tr("payWay"),
+                      ),
+                      trailing: Text(
+                        orderDetailsModel.data.payType,
+                        style: TextStyle(
+                          color: MyColors.offPrimary,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-//Image BarCode
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: MyColors.containerColor,
-                    borderRadius: BorderRadius.circular(5),
+                  //Image BarCode
+                  SizedBox(
+                    height: 10,
                   ),
-                  child: Text(
-                    tr("elecInvoice"),
-                    style: TextStyle(fontFamily: 'Tajawal-Bold'),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      tr("elecInvoice"),
+                      style: TextStyle(fontFamily: 'Tajawal-Bold'),
+                    ),
                   ),
-                ),
-                QrInvoice(
-                  price: calculateTotalPrice(),
-                  date: orderDetailsModel.data.details.date,
-                  tax: orderDetailsModel.data.details.tax,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.11,
-                )
-              ],
-            ),
+                  QrInvoice(
+                    price: calculateTotalPrice(),
+                    date: orderDetailsModel.data.details.date,
+                    tax: orderDetailsModel.data.details.tax,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.11,
+                  )
+                ],
+              ),
+      ),
     );
   }
 
@@ -944,9 +1028,10 @@ class _OrderDetailsState extends State<OrderDetails> {
   Future payWithWalletOrCash(int billNo) async {
     String endPoint;
     if (orderDetailsModel.data.payType == 'كاش' ||
-        orderDetailsModel.data.payType == '') {
+        orderDetailsModel.data.payType == 'cash') {
       endPoint = "api/pay-cash";
-    } else if (orderDetailsModel.data.payType == 'محفظه') {
+    } else if (orderDetailsModel.data.payType == 'محفظه' ||
+        orderDetailsModel.data.payType == 'wallet') {
       endPoint = "api/wallet-pay";
     }
     LoadingDialog.showLoadingDialog();
@@ -961,10 +1046,10 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
     print(url);
     try {
-      final response = await http.get(url, headers: {
+      final response = await http.post(url, headers: {
         "Authorization": "Bearer ${preferences.getString("token")}"
       }).timeout(
-        Duration(seconds: 7),
+        Duration(seconds: 10),
         onTimeout: () => throw 'no internet please connect to internet',
       );
       final responseData = json.decode(response.body);

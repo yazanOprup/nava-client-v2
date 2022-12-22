@@ -37,12 +37,12 @@ class _VisaWebViewState extends State<VisaWebView> {
     _onUrlChanged =
         flutterWebViewPlugin.onUrlChanged.listen((String url) async {
       if (mounted) {
-        if (url == 'https://navaservices.net/api/success') {
+        if (url == 'http://navaservices.net/api/success') {
           Fluttertoast.showToast(msg: 'تم دفع الطلب بنجاح');
           Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();
           Navigator.of(context).pop();
-        } else if (url == 'https://navaservices.net/api/fail') {
+        } else if (url == 'http://navaservices.net/api/fail') {
           Fluttertoast.showToast(msg: 'لم يتم دفع الطلب');
           Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();
@@ -80,7 +80,7 @@ class _VisaWebViewState extends State<VisaWebView> {
         ),
       ),
       url:
-          "https://navaservices.net/api/pay-visa?lang=ar&order_id=${widget.orderId}",
+          "http://navaservices.net/api/pay-visa?lang=ar&order_id=${widget.orderId}",
     );
   }
 }
