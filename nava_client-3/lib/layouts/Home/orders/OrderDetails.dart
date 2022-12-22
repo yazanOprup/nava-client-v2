@@ -165,90 +165,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               ),
                                               submitButtonText: tr('done'),
                                               onSubmitted: (response) async {
-                                                SharedPreferences preferences =
-                                                    await SharedPreferences
-                                                        .getInstance();
-                                                try {
-                                                  LoadingDialog
-                                                      .showLoadingDialog();
-                                                  final url = Uri.http(URL,
-                                                      "api/rate-order-tech");
-                                                  final httpResponse =
-                                                      await http.post(
-                                                    url,
-                                                    headers: {
-                                                      "Authorization":
-                                                          "Bearer ${preferences.getString("token")}",
-                                                    },
-                                                    body: {
-                                                      "order_id":
-                                                          orderDetailsModel
-                                                              .data.details.id,
-                                                      "rate": response.rating,
-                                                      "comment":
-                                                          response.comment,
-                                                      "lang": preferences
-                                                          .getString("lang"),
-                                                    },
-                                                  ).timeout(
-                                                    Duration(seconds: 10),
-                                                    onTimeout: () =>
-                                                        throw 'no internet please connect to internet',
-                                                  );
-                                                  final responseData =
-                                                      json.decode(
-                                                          httpResponse.body);
-                                                  if (httpResponse.statusCode ==
-                                                      200) {
-                                                    EasyLoading.dismiss();
-                                                    print(responseData);
-                                                    if (responseData["key"] ==
-                                                        "success") {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              SuccessfulOrder(),
-                                                        ),
-                                                      );
-                                                      Fluttertoast.showToast(
-                                                          msg: responseData[
-                                                              "msg"]);
-                                                    } else {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              SuccessfulOrder(),
-                                                        ),
-                                                      );
-                                                      Fluttertoast.showToast(
-                                                          msg: responseData[
-                                                              "msg"]);
-                                                    }
-                                                  }
-                                                } catch (e, t) {
-                                                  EasyLoading.dismiss();
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SuccessfulOrder(),
-                                                    ),
-                                                  );
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          "Somthing went wrong for rating");
-                                                  print("error $e   track $t");
-                                                }
-                                                print(
-                                                    "OnSubmitPressed rating = ${response.rating}");
-                                                print(
-                                                    'comment :${response.comment} ');
-                                                // rating="${response.rating}" as double;
-                                                // commentText="${response.rating}";
-                                                // print("Value Rating : "+ rating.toString());
-                                                // print("Value Comment : "+commentText.toString());
+                                                await rateOrder(response.rating,
+                                                    response.comment);
                                               });
                                         });
                                   }
@@ -768,6 +686,64 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
       ),
     );
+  }
+
+  Future rateOrder(double rate, String comment) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    LoadingDialog.showLoadingDialog();
+    final url = Uri.http(URL, "api/rate-order-tech");
+    print(orderDetailsModel.data.details.id);
+    try {
+      final httpResponse = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer ${preferences.getString("token")}",
+        },
+        body: {
+          "order_id": orderDetailsModel.data.details.id,
+          "rate": rate,
+          "comment": comment,
+        },
+      ).timeout(
+        Duration(seconds: 10),
+        onTimeout: () => throw 'no internet please connect to internet',
+      );
+      final responseData = json.decode(httpResponse.body);
+      if (httpResponse.statusCode == 200) {
+        EasyLoading.dismiss();
+        print(responseData);
+        if (responseData["key"] == "success") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SuccessfulOrder(),
+            ),
+          );
+          Fluttertoast.showToast(msg: responseData["msg"]);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SuccessfulOrder(),
+            ),
+          );
+          Fluttertoast.showToast(msg: responseData["msg"]);
+        }
+      }
+    } catch (e, t) {
+      EasyLoading.dismiss();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessfulOrder(),
+        ),
+      );
+      //Fluttertoast.showToast(msg: "Somthing went wrong");
+    }
+    // rating="${response.rating}" as double;
+    // commentText="${response.rating}";
+    // print("Value Rating : "+ rating.toString());
+    // print("Value Comment : "+commentText.toString());
   }
 
   Widget followItem({String title, bool done, String location}) {
