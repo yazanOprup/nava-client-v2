@@ -267,8 +267,12 @@ class _SettingsState extends State<Settings> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (c) => Splash()), (route) => false);
     }
+
     LoadingDialog.showLoadingDialog();
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove("fcm_token");
+    preferences.remove("userId");
+    preferences.remove("token");
     String deviceId = await _getId();
 
     preferences.setString("device_id", deviceId);
@@ -276,7 +280,7 @@ class _SettingsState extends State<Settings> {
     print("out:" + preferences.getString("device_id"));
     final url = Uri.http(URL, "api/logout");
     try {
-      print("out:" + preferences.getString("fcm_token"));
+      //print("out:" + preferences.getString("fcm_token"));
       final response = await http.post(
         url,
         headers: {

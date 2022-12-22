@@ -25,8 +25,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../helpers/customs/CustomBackButton.dart';
 
 class SubCategoryDetails extends StatefulWidget {
-  final int id, categoryId;
-  final String name, img;
+  final int id;
+  final String name, img , categoryId;
 
   const SubCategoryDetails(
       {Key key, this.id, this.name, this.img, this.categoryId})

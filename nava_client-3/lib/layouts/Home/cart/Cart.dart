@@ -26,7 +26,7 @@ import 'AddNotesAndImages.dart';
 import 'Address.dart';
 
 class Cart extends StatefulWidget {
-  final int categoryId;
+  final String categoryId;
 
   const Cart({Key key, this.categoryId}) : super(key: key);
 

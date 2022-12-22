@@ -186,6 +186,7 @@ class _LoginState extends State<Login> {
     String deviceId = await _getId();
     preferences.setString("device_id", deviceId);
     print("Device Id : " + deviceId.toString());
+    print(_phone.text);
     print("========> login00");
     setState(() => loading = true);
     final url = Uri.http(URL, "api/sign-in");
@@ -229,7 +230,7 @@ class _LoginState extends State<Login> {
     } catch (e, t) {
       setState(() => loading = false);
       print("========> login09");
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: "Please try again");
     }
   }
 

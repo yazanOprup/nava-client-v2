@@ -66,8 +66,8 @@ class Slider {
   int id;
   String title;
   String image;
-  int categoryId;
-  int subCategoryId;
+  String categoryId;
+  String subCategoryId;
   String subCategoryTitle;
   String subCategoryImage;
 

@@ -169,14 +169,16 @@ class _MainState extends State<Main> {
                                   ),
                                 )
                               : Container(
-                                  height: 140,
+                                  height: 180,
                                   child: Swiper(
+                                    //loop: true,
                                     duration: 1000,
-                                    autoplay: true,
+                                    //autoplay: true,
+                                    //loop: false,
                                     itemCount:
                                         homeSliderModel.data.sliders.length,
                                     fade: .6,
-                                    viewportFraction: .86,
+                                    viewportFraction: .9,
                                     scrollDirection: Axis.horizontal,
                                     pagination: SwiperPagination(
                                       alignment: Alignment.bottomCenter,
@@ -196,8 +198,8 @@ class _MainState extends State<Main> {
                                                       .data
                                                       .sliders[i]
                                                       .categoryId,
-                                                  id: homeSliderModel.data
-                                                      .sliders[i].subCategoryId,
+                                                  id: int.parse(homeSliderModel.data
+                                                      .sliders[i].subCategoryId),
                                                   img: homeSliderModel
                                                       .data
                                                       .sliders[i]
@@ -225,10 +227,12 @@ class _MainState extends State<Main> {
                                                 color: MyColors.accent
                                                     .withOpacity(.1),
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        homeSliderModel.data
-                                                            .sliders[i].image),
-                                                    fit: BoxFit.cover),
+                                                  image: NetworkImage(
+                                                    homeSliderModel
+                                                        .data.sliders[i].image,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                             if (homeSliderModel.data.sliders[i]
@@ -275,7 +279,6 @@ class _MainState extends State<Main> {
                   getSearch();
                 },
               ),
-
               loading
                   ? Container(
                       height: MediaQuery.of(context).size.height * .5,
@@ -322,10 +325,18 @@ class _MainState extends State<Main> {
         child: Column(
           children: [
             Expanded(
-              child: Image(
-                image: NetworkImage(img),
-                width: 20,
-                color: MyColors.offPrimary,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(img)
+                  ),
+                ),
               ),
             ),
             Container(
@@ -552,7 +563,7 @@ class _MainState extends State<Main> {
         if (responseData["key"] == "success") {
           homeModel = HomeModel.fromJson(responseData);
         } else {
-           Fluttertoast.showToast(msg: responseData["msg"]);
+          Fluttertoast.showToast(msg: responseData["msg"]);
         }
       }
     } catch (e, t) {

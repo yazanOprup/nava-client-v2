@@ -78,7 +78,7 @@ class _SubCategoriesState extends State<SubCategories> {
           MaterialPageRoute(
             builder: (c) => SubCategoryDetails(
               id: id,
-              categoryId: widget.id,
+              categoryId: widget.id.toString(),
               name: title,
               img: img,
             ),
@@ -92,11 +92,19 @@ class _SubCategoriesState extends State<SubCategories> {
         ),
         child: Column(
           children: [
-            Expanded(
-              child: Image(
-                image: NetworkImage(img),
-                width: 20,
-                color: MyColors.offPrimary,
+             Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(img)
+                  ),
+                ),
               ),
             ),
             Container(
