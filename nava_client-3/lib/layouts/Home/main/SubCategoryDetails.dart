@@ -26,7 +26,7 @@ import '../../../helpers/customs/CustomBackButton.dart';
 
 class SubCategoryDetails extends StatefulWidget {
   final int id;
-  final String name, img , categoryId;
+  final String name, img, categoryId;
 
   const SubCategoryDetails(
       {Key key, this.id, this.name, this.img, this.categoryId})
@@ -53,403 +53,614 @@ class _SubCategoryDetailsState extends State<SubCategoryDetails> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
         leading: CustomBackButton(ctx: context),
       ),
-      bottomSheet: loading
+      // bottomSheet: loading
+      //     ? MyLoading()
+      //     : Padding(
+      //         padding: const EdgeInsets.all(20),
+      //         child: Container(
+      //           width: MediaQuery.of(context).size.width,
+      //           //height: MediaQuery.of(context).size.height * .32,
+      //           decoration: BoxDecoration(
+      //             color: MyColors.secondary,
+      //             //border: Border.all(color: MyColors.grey, width: .5),
+      //             borderRadius: BorderRadius.circular(5),
+      //           ),
+      //           child: Padding(
+      //             padding:
+      //                 const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      //             child: Column(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               mainAxisSize: MainAxisSize.min,
+      //               children: [
+      //                 Padding(
+      //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+      //                   child: Column(
+      //                     children: [
+      //                       Row(
+      //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                         children: [
+      //                           Text(tr("vat"), style: TextStyle(fontSize: 14)),
+      //                           Row(
+      //                             children: [
+      //                               Padding(
+      //                                 padding: const EdgeInsets.symmetric(
+      //                                   horizontal: 5,
+      //                                 ),
+      //                                 child: Text(
+      //                                   addToCartModel.data == null
+      //                                       ? subCategoryDetailsModel.data.tax
+      //                                           .toString()
+      //                                       : addToCartModel.data.tax
+      //                                           .toString(),
+      //                                   style: TextStyle(
+      //                                     fontSize: 15,
+      //                                     //fontWeight: FontWeight.bold,
+      //                                     color: MyColors.black,
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               Text(
+      //                                 tr("rs"),
+      //                                 style: TextStyle(fontSize: 14),
+      //                               ),
+      //                             ],
+      //                           )
+      //                         ],
+      //                       ),
+      //                       Padding(
+      //                         padding: const EdgeInsets.symmetric(vertical: 10),
+      //                         child: Row(
+      //                           mainAxisAlignment:
+      //                               MainAxisAlignment.spaceBetween,
+      //                           children: [
+      //                             Text(
+      //                               tr("total"),
+      //                               style: TextStyle(
+      //                                   fontSize: 16,
+      //                                   fontWeight: FontWeight.bold),
+      //                             ),
+      //                             Row(
+      //                               children: [
+      //                                 Padding(
+      //                                   padding: const EdgeInsets.symmetric(
+      //                                       horizontal: 5),
+      //                                   child: Text(
+      //                                     addToCartModel.data == null
+      //                                         ? subCategoryDetailsModel
+      //                                             .data.price
+      //                                             .toString()
+      //                                         : addToCartModel.data.price
+      //                                             .toString(),
+      //                                     style: TextStyle(
+      //                                       fontSize: 16,
+      //                                       //fontWeight: FontWeight.bold,
+      //                                       color: MyColors.black,
+      //                                     ),
+      //                                   ),
+      //                                 ),
+      //                                 Text(
+      //                                   tr("rs"),
+      //                                   style: TextStyle(fontSize: 14),
+      //                                 ),
+      //                               ],
+      //                             )
+      //                           ],
+      //                         ),
+      //                       ),
+      //                       Divider(),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 Padding(
+      //                   padding: const EdgeInsets.symmetric(horizontal: 20),
+      //                   child: Text(
+      //                     tr("longText01"),
+      //                     style: TextStyle(
+      //                         fontSize: 11,
+      //                         //fontWeight: FontWeight.bold,
+      //                         color: MyColors.grey),
+      //                     textAlign: TextAlign.center,
+      //                   ),
+      //                 ),
+      //                 CustomButton(
+      //                   height: 40,
+      //                   title: tr("continue"),
+      //                   onTap: () {
+      //                     if (subCategoryDetailsModel.data.price == 0 &&
+      //                         addToCartModel.data == null) {
+      //                       Fluttertoast.showToast(
+      //                         msg: "youShouldAtLeastAddOneServiceToContinue"
+      //                             .tr(),
+      //                       );
+      //                       return;
+      //                     }
+      //                     Navigator.of(context).push(
+      //                       MaterialPageRoute(
+      //                         builder: (c) => Cart(
+      //                           categoryId: widget.categoryId,
+      //                         ),
+      //                       ),
+      //                     );
+      //                   },
+      //                 ),
+      //                 CustomButton(
+      //                   height: 40,
+      //                   title: tr("goToCart"),
+      //                   onTap: () {
+      //                     Navigator.of(context).push(
+      //                       MaterialPageRoute(
+      //                         builder: (c) => Cart(
+      //                           categoryId: widget.categoryId,
+      //                         ),
+      //                       ),
+      //                     );
+      //                   },
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      body: loading
           ? MyLoading()
           : Padding(
               padding: const EdgeInsets.all(20),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                //height: MediaQuery.of(context).size.height * .32,
-                decoration: BoxDecoration(
-                  color: MyColors.secondary,
-                  //border: Border.all(color: MyColors.grey, width: .5),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(tr("vat"), style: TextStyle(fontSize: 14)),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 5,
-                                      ),
-                                      child: Text(
-                                        addToCartModel.data == null
-                                            ? subCategoryDetailsModel.data.tax
-                                                .toString()
-                                            : addToCartModel.data.tax
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          //fontWeight: FontWeight.bold,
-                                          color: MyColors.black,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                              //padding: EdgeInsets.symmetric(horizontal: 15),
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  subCategoryDetailsModel.data.services.length,
+                              itemBuilder: (c, i) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  // height: 75,
+                                  margin: EdgeInsets.only(top: 8),
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.secondary,
+                                    //border: Border.all(width: .5, color: MyColors.grey),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                if (subCategoryDetailsModel
+                                                    .data.services[i].checked) {
+                                                  if (i == 0) {
+                                                    await addToCart(
+                                                      counter: "down",
+                                                      serviceId:
+                                                          subCategoryDetailsModel
+                                                              .data
+                                                              .services[i]
+                                                              .id
+                                                              .toString(),
+                                                      unchecked: "0",
+                                                    );
+                                                  } else {
+                                                    await addToCart(
+                                                        counter: "down",
+                                                        serviceId:
+                                                            subCategoryDetailsModel
+                                                                .data
+                                                                .services[i]
+                                                                .id
+                                                                .toString(),
+                                                        unchecked: "1");
+                                                  }
+                                                } else {
+                                                  await addToCart(
+                                                      counter: "up",
+                                                      serviceId:
+                                                          subCategoryDetailsModel
+                                                              .data
+                                                              .services[i]
+                                                              .id
+                                                              .toString(),
+                                                      unchecked: "0");
+                                                }
+                                                setState(() {
+                                                  subCategoryDetailsModel.data
+                                                          .services[i].checked =
+                                                      !subCategoryDetailsModel
+                                                          .data
+                                                          .services[i]
+                                                          .checked;
+                                                  subCategoryDetailsModel.data
+                                                          .services[i].count ++;
+                                                });
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    subCategoryDetailsModel.data
+                                                            .services[i].checked
+                                                        ? Icons.check_circle
+                                                        : Icons
+                                                            .radio_button_unchecked,
+                                                    color:
+                                                        subCategoryDetailsModel
+                                                                .data
+                                                                .services[i]
+                                                                .checked
+                                                            ? MyColors.primary
+                                                            : MyColors.grey,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 5),
+                                                    child: Text(
+                                                      subCategoryDetailsModel
+                                                          .data
+                                                          .services[i]
+                                                          .title,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            i == 0
+                                                ? Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 2,
+                                                        ),
+                                                        child: Text(
+                                                          subCategoryDetailsModel
+                                                              .data
+                                                              .services[i]
+                                                              .price
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                MyColors.black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        tr("rs"),
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: MyColors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container(),
+                                          ],
                                         ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 5,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(
+                                            subCategoryDetailsModel
+                                                .data.services[i].description,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: MyColors.grey,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        i != 0
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            horizontal: 2,
+                                                          ),
+                                                          child: Text(
+                                                            subCategoryDetailsModel
+                                                                .data
+                                                                .services[i]
+                                                                .price
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: MyColors
+                                                                  .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          tr("rs"),
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color:
+                                                                MyColors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            await addToCart(
+                                                              serviceId:
+                                                                  subCategoryDetailsModel
+                                                                      .data
+                                                                      .services[
+                                                                          i]
+                                                                      .id
+                                                                      .toString(),
+                                                              counter: "up",
+                                                              unchecked: "0",
+                                                            );
+
+                                                            setState(() {
+                                                              subCategoryDetailsModel
+                                                                  .data
+                                                                  .services[i]
+                                                                  .count++;
+                                                            });
+                                                          },
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .add_circle_outlined,
+                                                              size: 20,
+                                                              color: MyColors
+                                                                  .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          subCategoryDetailsModel
+                                                              .data
+                                                              .services[i]
+                                                              .count
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                MyColors.black,
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            if (subCategoryDetailsModel
+                                                                    .data
+                                                                    .services[i]
+                                                                    .count >
+                                                                1) {
+                                                              await addToCart(
+                                                                serviceId:
+                                                                    subCategoryDetailsModel
+                                                                        .data
+                                                                        .services[
+                                                                            i]
+                                                                        .id
+                                                                        .toString(),
+                                                                counter: "down",
+                                                                unchecked: "0",
+                                                              );
+                                                              setState(() {
+                                                                subCategoryDetailsModel
+                                                                    .data
+                                                                    .services[i]
+                                                                    .count--;
+                                                              });
+                                                            }
+                                                            if (subCategoryDetailsModel
+                                                                    .data
+                                                                    .services[i]
+                                                                    .count ==
+                                                                1) {
+                                                              await addToCart(
+                                                                serviceId:
+                                                                    subCategoryDetailsModel
+                                                                        .data
+                                                                        .services[
+                                                                            i]
+                                                                        .id
+                                                                        .toString(),
+                                                                counter: "down",
+                                                                unchecked: "1",
+                                                              );
+                                                              setState(() {
+                                                                subCategoryDetailsModel
+                                                                    .data
+                                                                    .services[i]
+                                                                    .count--;
+                                                                subCategoryDetailsModel
+                                                                    .data
+                                                                    .services[i]
+                                                                    .checked = false;
+                                                              });
+                                                            }
+                                                          },
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              size: 20,
+                                                              color: subCategoryDetailsModel
+                                                                          .data
+                                                                          .services[
+                                                                              i]
+                                                                          .count >=
+                                                                      1
+                                                                  ? MyColors
+                                                                      .black
+                                                                  : MyColors
+                                                                      .grey,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: MyColors.containerColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(tr("vat")),
+                                    Text(
+                                      (addToCartModel.data == null
+                                              ? subCategoryDetailsModel.data.tax
+                                                  .toString()
+                                              : addToCartModel.data.tax
+                                                  .toString()) +
+                                          " " +
+                                          tr("rs"),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      tr("total"),
+                                      style: const TextStyle(
+                                        fontFamily: 'Tajawal-Bold',
                                       ),
                                     ),
                                     Text(
-                                      tr("rs"),
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    tr("total"),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Text(
-                                          addToCartModel.data == null
+                                      (addToCartModel.data == null
                                               ? subCategoryDetailsModel
                                                   .data.price
                                                   .toString()
                                               : addToCartModel.data.price
-                                                  .toString(),
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            //fontWeight: FontWeight.bold,
-                                            color: MyColors.black,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        tr("rs"),
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          tr("longText01"),
-                          style: TextStyle(
-                              fontSize: 11,
-                              //fontWeight: FontWeight.bold,
-                              color: MyColors.grey),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      CustomButton(
-                        height: 40,
-                        title: tr("continue"),
-                        onTap: () {
-                          if (subCategoryDetailsModel.data.price == 0 &&
-                              addToCartModel.data == null) {
-                            Fluttertoast.showToast(
-                              msg: "youShouldAtLeastAddOneServiceToContinue"
-                                  .tr(),
-                            );
-                            return;
-                          }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (c) => Cart(
-                                categoryId: widget.categoryId,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      CustomButton(
-                        height: 40,
-                        title: tr("goToCart"),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (c) => Cart(
-                                categoryId: widget.categoryId,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-      body: loading
-          ? MyLoading()
-          : ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              // physics: NeverScrollableScrollPhysics(),
-              // shrinkWrap: true,
-              itemCount: subCategoryDetailsModel.data.services.length,
-              itemBuilder: (c, i) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  // height: 75,
-                  margin: EdgeInsets.only(top: 8),
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: MyColors.secondary,
-                    //border: Border.all(width: .5, color: MyColors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (subCategoryDetailsModel
-                                    .data.services[i].checked) {
-                                  if (i == 0) {
-                                    addToCart(
-                                      counter: "down",
-                                      serviceId: subCategoryDetailsModel
-                                          .data.services[i].id
-                                          .toString(),
-                                      unchecked: "0",
-                                    );
-                                  } else {
-                                    addToCart(
-                                        counter: "down",
-                                        serviceId: subCategoryDetailsModel
-                                            .data.services[i].id
-                                            .toString(),
-                                        unchecked: "1");
-                                  }
-                                } else {
-                                  addToCart(
-                                      counter: "up",
-                                      serviceId: subCategoryDetailsModel
-                                          .data.services[i].id
-                                          .toString(),
-                                      unchecked: "0");
-                                }
-                                setState(() {
-                                  subCategoryDetailsModel
-                                          .data.services[i].checked =
-                                      !subCategoryDetailsModel
-                                          .data.services[i].checked;
-                                });
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    subCategoryDetailsModel
-                                            .data.services[i].checked
-                                        ? Icons.check_circle
-                                        : Icons.radio_button_unchecked,
-                                    color: MyColors.grey,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      subCategoryDetailsModel
-                                          .data.services[i].title,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            i == 0
-                                ? Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 2,
-                                        ),
-                                        child: Text(
-                                          subCategoryDetailsModel
-                                              .data.services[i].price
-                                              .toString()
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: MyColors.black,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        tr("rs"),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: MyColors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            subCategoryDetailsModel
-                                .data.services[i].description,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: MyColors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        i != 0
-                            ? Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 2,
-                                          ),
-                                          child: Text(
-                                            subCategoryDetailsModel
-                                                .data.services[i].price
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: MyColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
+                                                  .toString()) +
+                                          " " +
                                           tr("rs"),
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: MyColors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        InkWell(
-                                          onTap: () {
-                                            addToCart(
-                                              serviceId: subCategoryDetailsModel
-                                                  .data.services[i].id
-                                                  .toString(),
-                                              counter: "up",
-                                              unchecked: "0",
-                                            );
-
-                                            setState(() {
-                                              subCategoryDetailsModel
-                                                  .data.services[i].count++;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5),
-                                            child: Icon(
-                                              Icons.add_circle_outlined,
-                                              size: 20,
-                                              color: MyColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          subCategoryDetailsModel
-                                              .data.services[i].count
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: MyColors.black,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              if (subCategoryDetailsModel
-                                                      .data.services[i].count >
-                                                  1) {
-                                                addToCart(
-                                                  serviceId:
-                                                      subCategoryDetailsModel
-                                                          .data.services[i].id
-                                                          .toString(),
-                                                  counter: "down",
-                                                  unchecked: "0",
-                                                );
-                                              }
-                                              if (subCategoryDetailsModel
-                                                      .data.services[i].count ==
-                                                  1) {
-                                                addToCart(
-                                                  serviceId:
-                                                      subCategoryDetailsModel
-                                                          .data.services[i].id
-                                                          .toString(),
-                                                  counter: "down",
-                                                  unchecked: "1",
-                                                );
-                                              }
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(5),
-                                              child: Icon(
-                                                Icons.remove_circle_outline,
-                                                size: 20,
-                                                color: subCategoryDetailsModel
-                                                            .data
-                                                            .services[i]
-                                                            .count >=
-                                                        1
-                                                    ? MyColors.black
-                                                    : MyColors.grey,
-                                              ),
-                                            )),
-                                      ],
+                                      style: const TextStyle(
+                                        fontFamily: 'Tajawal-Bold',
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
-                            : Container(),
-                      ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  tr("taxNote"),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: MyColors.textSettings,
+                                      fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                );
-              }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomButton(
+                    height: 40,
+                    title: tr("continue"),
+                    onTap: () {
+                      if (subCategoryDetailsModel.data.price == 0 &&
+                          addToCartModel.data == null) {
+                        Fluttertoast.showToast(
+                          msg: "youShouldAtLeastAddOneServiceToContinue".tr(),
+                        );
+                        return;
+                      }
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (c) => Cart(
+                            categoryId: widget.categoryId,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomButton(
+                    height: 40,
+                    title: tr("goToCart"),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (c) => Cart(
+                            categoryId: widget.categoryId,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
     );
   }
 

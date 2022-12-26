@@ -1,21 +1,19 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:nava/helpers/constants/MyColors.dart';
-import 'package:nava/helpers/constants/base.dart';
-import 'package:nava/helpers/customs/AppBarFoot.dart';
-import 'package:nava/helpers/customs/Loading.dart';
-import 'package:nava/helpers/models/FQsModel.dart';
-import 'package:nava/layouts/settings/contact_us/ContactUs.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+import '../../../helpers/constants/MyColors.dart';
+import '../../../helpers/constants/base.dart';
 import '../../../helpers/customs/CustomBackButton.dart';
-import '../../../res.dart';
-import '../contact_us/mainContactUs.dart';
+import '../../../helpers/customs/Loading.dart';
+import '../../../helpers/models/FQsModel.dart';
 
 class FQs extends StatefulWidget {
   @override
@@ -40,33 +38,28 @@ class _FQsState extends State<FQs> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
         leading: CustomBackButton(ctx: context),
       ),
-      body: Column(
-        children: [
-          loading
-              ? Expanded(child: MyLoading())
-              : Container(
-                  height: MediaQuery.of(context).size.height * .82,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: fQsModel.data.length,
-                    itemBuilder: (c, i) {
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            fQsModel.data[i].open = !fQsModel.data[i].open;
-                          });
-                        },
-                        child: questionItem(
-                          question: fQsModel.data[i].question,
-                          answer: fQsModel.data[i].answer,
-                          open: fQsModel.data[i].open,
-                        ),
-                      );
+      body: loading
+          ? MyLoading()
+          : Container(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(20),
+                itemCount: fQsModel.data.length,
+                itemBuilder: (c, i) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        fQsModel.data[i].open = fQsModel.data[i].open;
+                      });
                     },
-                  ),
-                ),
-        ],
-      ),
+                    child: questionItem(
+                      question: fQsModel.data[i].question,
+                      answer: fQsModel.data[i].answer,
+                      open: fQsModel.data[i].open,
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 
@@ -79,13 +72,8 @@ class _FQsState extends State<FQs> {
             height: 50,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: open ? MyColors.primary : MyColors.containerColor,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(5),
-                bottomRight: Radius.circular(5),
-              ),
+              color: MyColors.containerColor,
+              borderRadius: BorderRadius.circular(5),
               // border: Border.all(
               //   width: 1.5,
               //   color: MyColors.grey.withOpacity(.4),
@@ -99,38 +87,40 @@ class _FQsState extends State<FQs> {
                   Text(
                     question,
                     style: TextStyle(
-                        color: open ? MyColors.white : MyColors.primary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                      //color: open ? MyColors.white : MyColors.primary,
+                      fontSize: 15,
+                      //fontWeight: FontWeight.bold,
+                      color: MyColors.textSettings
+                    ),
                   ),
                   Icon(
-                    open ? Icons.expand_less : Icons.expand_more,
-                    color: open ? MyColors.white : MyColors.primary,
+                    open ? Icons.arrow_circle_up : Icons.arrow_circle_down,
+                    color: MyColors.textSettings
                   ),
                 ],
               ),
             ),
           ),
+          if (open)
+            const SizedBox(
+              height: 10,
+            ),
           open
               ? Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5),
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  //margin: EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.all(10),
                   // height: 80,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: MyColors.containerColor,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10)),
-                    border: Border.all(
-                      width: 1.5,
-                      color: MyColors.grey.withOpacity(.4),
-                    ),
+                    borderRadius: BorderRadius.circular(5),
+                    
                   ),
                   child: Text(
                     answer,
                     style: TextStyle(
                       fontSize: 15,
+                      color: MyColors.textSettings
                     ),
                   ),
                 )

@@ -14,6 +14,7 @@
   "OTPFaild" : "OTP Didn't sent ? send again",
   "showInvoice" : "Show invoice",
   "elecInvoice" : "Electronic invoice",
+  "taxNote" : "The prices mentioned above do not include VAT and include labor cost only. If there are more works or materials required, they will be billed separately. 30 days warranty on work",
   "name": " Name ",
   "goToCart" : "Go to cart",
   "guarantee" : "Guarantees",

@@ -50,166 +50,306 @@ class _WalletState extends State<Wallet> {
       ),
       body: visitorProvider.visitor
           ? Visitor()
-          : ListView(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-              children: [
-                Image(
-                  image: ExactAssetImage(Res.wallet3),
-                  height: 100,
-                  width: 50,
-                ),
-                Center(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    tr("currentBalance"),
-                    style: TextStyle(fontSize: 20),
-                  ),
-                )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          wallet,
-                          style: TextStyle(
-                              fontSize: 60,
-                              fontWeight: FontWeight.bold,
-                              color: MyColors.primary),
+          : Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyColors.containerColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        tr("currentBalance"),
+                        style: TextStyle(
+                          color: MyColors.textSettings,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              tr("r"),
-                              style: TextStyle(fontSize: 18),
+                      trailing: Text(
+                        "$wallet ${tr("rs")}",
+                        style:
+                            TextStyle(fontFamily: 'Tajawal-Bold', fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      RichTextFiled(
+                        controller: controller,
+                        label: "chargeValue".tr(),
+                        type: TextInputType.number,
+                        margin: EdgeInsets.only(top: 8, bottom: 10),
+                        action: TextInputAction.done,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            tr("selectPay"),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors.offPrimary,
                             ),
-                            Text(
-                              tr("s"),
-                              style: TextStyle(fontSize: 18),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                type = PayType.visa;
+                              });
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                    activeColor: MyColors.primary,
+                                    value: PayType.visa,
+                                    groupValue: type,
+                                    onChanged: (PayType value) {
+                                      setState(() {
+                                        print(value);
+                                        type = value;
+                                      });
+                                    }),
+                                Image(
+                                  image: ExactAssetImage(Res.visa),
+                                  width: 50,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                type = PayType.mada;
+                              });
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                    activeColor: MyColors.primary,
+                                    hoverColor: MyColors.white,
+                                    focusColor: MyColors.white,
+                                    value: PayType.mada,
+                                    groupValue: type,
+                                    onChanged: (PayType value) {
+                                      setState(() {
+                                        print(value);
+                                        type = value;
+                                      });
+                                    }),
+                                Image(
+                                  image: ExactAssetImage(Res.mada),
+                                  width: 50,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      CustomButton(
+                        title: tr("chargeBalance"),
+                        //margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        onTap: () {
+                          if (controller.text.isEmpty) {
+                            Fluttertoast.showToast(
+                                msg: 'من فضلك ادخل قيمة الشحن');
+                            return;
+                          }
+                          if (type == PayType.visa) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ChargeWalletVisa(
+                                  amount: int.parse(controller.text),
+                                  userId: userId,
+                                ),
+                              ),
+                            );
+                          } else if (type == PayType.mada) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ChargeWalletMada(
+                                  amount: int.parse(controller.text),
+                                  userId: userId,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ],
-                  ),
-                ),
-                RichTextFiled(
-                  controller: controller,
-                  label: "chargeValue".tr(),
-                  type: TextInputType.number,
-                  margin: EdgeInsets.only(top: 8, bottom: 10),
-                  action: TextInputAction.done,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      tr("selectPay"),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: MyColors.offPrimary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          type = PayType.visa;
-                        });
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                              activeColor: MyColors.primary,
-                              value: PayType.visa,
-                              groupValue: type,
-                              onChanged: (PayType value) {
-                                setState(() {
-                                  print(value);
-                                  type = value;
-                                });
-                              }),
-                          Image(
-                            image: ExactAssetImage(Res.visa),
-                            width: 50,
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          type = PayType.mada;
-                        });
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                              activeColor: MyColors.primary,
-                              hoverColor: MyColors.white,
-                              focusColor: MyColors.white,
-                              value: PayType.mada,
-                              groupValue: type,
-                              onChanged: (PayType value) {
-                                setState(() {
-                                  print(value);
-                                  type = value;
-                                });
-                              }),
-                          Image(
-                            image: ExactAssetImage(Res.mada),
-                            width: 50,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CustomButton(
-                  title: tr("chargeBalance"),
-                  //margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  onTap: () {
-                    if (controller.text.isEmpty) {
-                      Fluttertoast.showToast(msg: 'من فضلك ادخل قيمة الشحن');
-                      return;
-                    }
-                    if (type == PayType.visa) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ChargeWalletVisa(
-                            amount: int.parse(controller.text),
-                            userId: userId,
-                          ),
-                        ),
-                      );
-                    } else if (type == PayType.mada) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ChargeWalletMada(
-                            amount: int.parse(controller.text),
-                            userId: userId,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                )
-              ],
+                  )
+                ],
+              ),
             ),
+      // body: visitorProvider.visitor
+      //     ? Visitor()
+      //     : ListView(
+      //         padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      //         children: [
+      //           Image(
+      //             image: ExactAssetImage(Res.wallet3),
+      //             height: 100,
+      //             width: 50,
+      //           ),
+      //           Center(
+      //               child: Padding(
+      //             padding: const EdgeInsets.symmetric(vertical: 15),
+      //             child: Text(
+      //               tr("currentBalance"),
+      //               style: TextStyle(fontSize: 20),
+      //             ),
+      //           )),
+      //           Padding(
+      //             padding: const EdgeInsets.symmetric(vertical: 10),
+      //             child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               crossAxisAlignment: CrossAxisAlignment.end,
+      //               children: [
+      //                 Padding(
+      //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+      //                   child: Text(
+      //                     wallet,
+      //                     style: TextStyle(
+      //                         fontSize: 60,
+      //                         fontWeight: FontWeight.bold,
+      //                         color: MyColors.primary),
+      //                   ),
+      //                 ),
+      //                 Padding(
+      //                   padding: const EdgeInsets.only(bottom: 12),
+      //                   child: Column(
+      //                     crossAxisAlignment: CrossAxisAlignment.start,
+      //                     children: [
+      //                       Text(
+      //                         tr("r"),
+      //                         style: TextStyle(fontSize: 18),
+      //                       ),
+      //                       Text(
+      //                         tr("s"),
+      //                         style: TextStyle(fontSize: 18),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      // RichTextFiled(
+      //   controller: controller,
+      //   label: "chargeValue".tr(),
+      //   type: TextInputType.number,
+      //   margin: EdgeInsets.only(top: 8, bottom: 10),
+      //   action: TextInputAction.done,
+      // ),
+      // SizedBox(
+      //   height: 10,
+      // ),
+      // Column(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: [
+      //     Text(
+      //       tr("selectPay"),
+      //       style: TextStyle(
+      //         fontSize: 16,
+      //         fontWeight: FontWeight.bold,
+      //         color: MyColors.offPrimary,
+      //       ),
+      //     ),
+      //     InkWell(
+      //       onTap: () {
+      //         setState(() {
+      //           type = PayType.visa;
+      //         });
+      //       },
+      //       child: Row(
+      //         children: <Widget>[
+      //           Radio(
+      //               activeColor: MyColors.primary,
+      //               value: PayType.visa,
+      //               groupValue: type,
+      //               onChanged: (PayType value) {
+      //                 setState(() {
+      //                   print(value);
+      //                   type = value;
+      //                 });
+      //               }),
+      //           Image(
+      //             image: ExactAssetImage(Res.visa),
+      //             width: 50,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //     InkWell(
+      //       onTap: () {
+      //         setState(() {
+      //           type = PayType.mada;
+      //         });
+      //       },
+      //       child: Row(
+      //         children: <Widget>[
+      //           Radio(
+      //               activeColor: MyColors.primary,
+      //               hoverColor: MyColors.white,
+      //               focusColor: MyColors.white,
+      //               value: PayType.mada,
+      //               groupValue: type,
+      //               onChanged: (PayType value) {
+      //                 setState(() {
+      //                   print(value);
+      //                   type = value;
+      //                 });
+      //               }),
+      //           Image(
+      //             image: ExactAssetImage(Res.mada),
+      //             width: 50,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      // CustomButton(
+      //   title: tr("chargeBalance"),
+      //   //margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      //   onTap: () {
+      //     if (controller.text.isEmpty) {
+      //       Fluttertoast.showToast(msg: 'من فضلك ادخل قيمة الشحن');
+      //       return;
+      //     }
+      //     if (type == PayType.visa) {
+      //       Navigator.of(context).push(
+      //         MaterialPageRoute(
+      //           builder: (context) => ChargeWalletVisa(
+      //             amount: int.parse(controller.text),
+      //             userId: userId,
+      //           ),
+      //         ),
+      //       );
+      //     } else if (type == PayType.mada) {
+      //       Navigator.of(context).push(
+      //         MaterialPageRoute(
+      //           builder: (context) => ChargeWalletMada(
+      //             amount: int.parse(controller.text),
+      //             userId: userId,
+      //           ),
+      //         ),
+      //       );
+      //     }
+      //   },
+      // )
+      //         ],
+      //       ),
     );
   }
 
@@ -248,4 +388,3 @@ class _WalletState extends State<Wallet> {
     }
   }
 }
-
