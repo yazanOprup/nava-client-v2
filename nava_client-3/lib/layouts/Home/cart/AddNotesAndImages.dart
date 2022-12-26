@@ -55,7 +55,7 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
 
   @override
   void initState() {
-    _mPlayer.openAudioSession().then((value) {
+    _mPlayer.openPlayer().then((value) {
       setState(() => _mPlayerIsInited = true);
     });
     // openTheRecorder().then((value) {
@@ -66,7 +66,7 @@ class _AddNotesAndImagesState extends State<AddNotesAndImages> {
 
   @override
   void dispose() {
-    _mPlayer.closeAudioSession();
+    _mPlayer.closePlayer();
     _mPlayer = null;
     // _mRecorder.closeAudioSession();
     // _mRecorder = null;

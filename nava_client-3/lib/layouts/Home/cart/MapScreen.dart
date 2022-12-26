@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location_permissions/location_permissions.dart' as p;
+
 import 'package:nava/helpers/constants/MyColors.dart';
 import 'package:nava/helpers/customs/CustomButton.dart';
 import 'package:nava/helpers/customs/Loading.dart';
 
 import '../../../helpers/customs/CustomBackButton.dart';
+import 'package:permission_handler/permission_handler.dart' as p;
 
 class MapScreen extends StatefulWidget {
   @override
@@ -25,7 +27,7 @@ class _MapScreenState extends State<MapScreen> {
   bool onChoose = false;
 
   getInitialAddress() async {
-    Position position = await Geolocator().getCurrentPosition();
+    Position position = await Geolocator.getCurrentPosition();
     setState(() {
       currentLat = position.latitude;
       currentLng = position.longitude;
@@ -41,15 +43,13 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     getInitialAddress();
     super.initState();
-    p.LocationPermissions()
-        .requestPermissions()
+    p.Permission.location.request()
         .then((p.PermissionStatus status) {
       if (status == p.PermissionStatus.granted) {
         print("^^^^^^^^^^^^^^^^^^^^^^^^^^location granted");
-        Geolocator().getCurrentPosition().then((Position myLocation) {
-          setState(() {
-            Geolocator()
-                .placemarkFromCoordinates(
+        Geolocator.getCurrentPosition().then((Position myLocation) {
+          setState(() async {
+            await placemarkFromCoordinates(
                     myLocation.latitude, myLocation.longitude)
                 .then((address) {
               setState(() {
@@ -77,7 +77,7 @@ class _MapScreenState extends State<MapScreen> {
           });
         });
       } else if (status == p.PermissionStatus.denied) {
-        p.LocationPermissions().requestPermissions();
+        p.Permission.location.request();
         Navigator.pop(context);
         print("^^^^^^^^^^^^^^^^^^^^^^^^^^ location denied");
         Fluttertoast.showToast(msg: "Must Allow Location To Add Address");
@@ -212,15 +212,14 @@ class _MapScreenState extends State<MapScreen> {
     Position newMarkerPosition = Position(
         latitude: _position.target.latitude,
         longitude: _position.target.longitude);
-    setState(() {
+    setState(() async {
       updatedPosition = newMarkerPosition;
       currentLat = newMarkerPosition.latitude;
       currentLng = newMarkerPosition.longitude;
       // marker = marker.copyWith(
       //     positionParam:
       //         LatLng(newMarkerPosition.latitude, newMarkerPosition.longitude));
-      Geolocator()
-          .placemarkFromCoordinates(
+      await placemarkFromCoordinates(
               updatedPosition.latitude, updatedPosition.longitude)
           .then((address) {
         setState(() {

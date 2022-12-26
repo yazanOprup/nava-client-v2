@@ -128,7 +128,7 @@ class _MyAppState extends State<MyApp> {
             //   icon: "@mipmap/launcher_icon",
             //   // other properties...
             // ),
-            iOS: IOSNotificationDetails(
+            iOS: DarwinNotificationDetails(
               subtitle: "Text",
             ),
           ),
