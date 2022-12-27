@@ -90,8 +90,8 @@ class _AddressState extends State<Address> {
                       size: 26,
                     ),
                     margin: EdgeInsets.symmetric(vertical: 8),
-                    onTab: () {
-                      goToLocationScreen();
+                    onTab: () async {
+                      await goToLocationScreen();
                       print("-----> Receipt Address");
                     },
                   ),

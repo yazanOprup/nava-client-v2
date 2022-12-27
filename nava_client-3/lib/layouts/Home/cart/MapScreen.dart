@@ -198,6 +198,7 @@ class _MapScreenState extends State<MapScreen> {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.65,
+                      height: MediaQuery.of(context).size.height * 0.1,
                       padding: const EdgeInsets.all(12.0),
                       child: _confirmButton(context),
                     ),
@@ -237,6 +238,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget _confirmButton(BuildContext context) {
     return CustomButton(
       //color: MyColors.white,
+      
       title: tr("chooseCurrentLocation"),
       //borderColor: MyColors.primary,
       //textColor: MyColors.primary,
